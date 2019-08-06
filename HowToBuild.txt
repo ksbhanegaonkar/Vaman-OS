@@ -1,0 +1,4 @@
+1. Clone repository
+2. Go to the directory
+3. Run "npm install" command
+4. Above command will compile project and will add dependencies.
