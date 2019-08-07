@@ -8,3 +8,7 @@ Notes :
 To add dependency in project, run below command :
 npm i --save <dependancy name>
 e.g. npm i --save jquery
+
+To add jquery plugin, run below command :
+npm i --save jquery <plugin name>
+e.g. npm i --save jquery datatables.net
