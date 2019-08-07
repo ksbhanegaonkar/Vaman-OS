@@ -1,20 +1,15 @@
 import React,{Component} from 'react';
 import $ from 'jquery';
+import './Desktop.css';
+import TaskBar from '../TaskBar/TaskBar';
 class Desktop extends Component{
 
     render() {
-        return (<div>
-          <button onMouseEnter={this.onEnter} onMouseLeave={this.onLeave} >testing</button>
+        return (<div className="Desktop-wallpaper">
+         <TaskBar></TaskBar>
         </div>)
       }
 
-      onEnter = () => {
-        console.log('test btn clicked');
-        $("p").slideDown();
-      };
-      onLeave = () => {
-        console.log('test btn clicked');
-        $("p").slideUp();
-      };
+
 }
 export default Desktop;
