@@ -4,9 +4,13 @@ class Desktop extends Component{
 
     render() {
         return (<div>
-          test
+          <button onClick={this.arrFunc}>testing</button>
         </div>)
       }
 
+      arrFunc = () => {
+        console.log('test btn clicked');
+        $("p").slideToggle();
+      };
 }
 export default Desktop;
