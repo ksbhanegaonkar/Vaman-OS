@@ -71,7 +71,7 @@ class MyContextMenu extends Component {
         
         return(visible || null) && 
             <div ref={ref => {this.root = ref}} className="contextMenu">
-                <div className="contextMenu--option">Share this</div>
+                <div className="contextMenu--option" onClick={this.shareThis}>Share this</div>
                 <div className="contextMenu--option">New window</div>
                 <div className="contextMenu--option">Visit official site</div>
                 <div className="contextMenu--option contextMenu--option__disabled">View full version</div>
@@ -80,6 +80,10 @@ class MyContextMenu extends Component {
                 <div className="contextMenu--option">About this app</div>
             </div>
     };
+
+    shareThis(){
+        console.log("Share this");
+    }
 }
 
 export default MyContextMenu;
