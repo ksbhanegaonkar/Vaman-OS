@@ -1,9 +1,10 @@
 .Task-bar {
     position: fixed;
-    left: 0;
+    left: 10%;
     bottom: 0;
     width: 100%;
-    background-color: red;
+    height: 5%;
+    background-color: rgb(22, 1, 32);
     color: white;
     text-align: center;
  }

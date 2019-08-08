@@ -5,12 +5,11 @@ class StartMenu extends Component{
 
     
     render() {
-        return (<div className="start-menu">
-          <button onMouseEnter={this.onEnter} onMouseLeave={this.onLeave} >testing</button>
-          <div id="panel">Hello javatpoint.com!   
-It is the best tutorial website to learn jQuery and other languages.</div>  
+        return (<button className="start-menu" >
           
-        </div>)
+          Extras
+          
+        </button>)
       }
 
       onEnter = () => {

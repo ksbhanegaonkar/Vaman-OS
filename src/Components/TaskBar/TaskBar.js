@@ -6,7 +6,6 @@ class TaskBar extends Component{
 
     render() {
         return (<div className="Task-bar">
-          <StartMenu></StartMenu>
         </div>)
       }
 
