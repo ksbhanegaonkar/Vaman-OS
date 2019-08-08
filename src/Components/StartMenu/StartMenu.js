@@ -5,20 +5,24 @@ class StartMenu extends Component{
 
     
     render() {
-        return (<button className="start-menu" >
+        return (<button className="start-menu" onClick={this.openStartMenu}>
           
           Extras
           
         </button>)
       }
 
+      openStartMenu(){
+        console.log('Clicked start menu');
+      }
+
       onEnter = () => {
-        console.log('test btn clicked');
-        $("#panel").slideDown("slow");
+        console.log('Mouse entered task bar');
+       // $("#panel").slideDown("slow");
       };
       onLeave = () => {
-        console.log('test btn clicked');
-        $("#panel").slideUp("slow");
+        console.log('Mouse left task bar');
+       // $("#panel").slideUp("slow");
       };
 }
 export default StartMenu;
