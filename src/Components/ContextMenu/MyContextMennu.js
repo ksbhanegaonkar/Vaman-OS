@@ -3,9 +3,12 @@ import $ from 'jquery';
 import './MyContextMenu.scss';
 
 class MyContextMenu extends Component {
+    currentContextMenuOption;
     state = {
         visible: false,
-        contextMenuOption :['New Sprint','New User Story','Copy','Cut','Paste']
+        contextMenuOption :['New Sprint','New User Story','Copy','Cut','Paste'],
+        startButtonContextMenuOption :['Option 1','Option 2','Option 3','Option 4'],
+        taskBarContextMenuOption :['Option 5','Option 6','Option 7','Option 8']
     };
     
     componentDidMount() {
@@ -23,41 +26,40 @@ class MyContextMenu extends Component {
     _handleContextMenu = (event) => {
         event.preventDefault();
         console.log(event.target.className);
-        if(event.target.className === 'Desktop-wallpaper'){
-            this.setState({ visible: true });
-            const clickX = event.clientX;
-            const clickY = event.clientY;
-            const screenW = window.innerWidth;
-            const screenH = window.innerHeight;
-            const rootW = this.root.offsetWidth;
-            const rootH = this.root.offsetHeight;
-            
-            const right = (screenW - clickX) > rootW;
-            const left = !right;
-            const top = (screenH - clickY) > rootH;
-            const bottom = !top;
-            
-            if (right) {
-                this.root.style.left = `${clickX + 5}px`;
-            }
-            
-            if (left) {
-                this.root.style.left = `${clickX - rootW - 5}px`;
-            }
-            
-            if (top) {
-                this.root.style.top = `${clickY + 5}px`;
-            }
-            
-            if (bottom) {
-                this.root.style.top = `${clickY - rootH - 5}px`;
-            }
-        }else if(event.target.className === 'start-menu-button'){
-            console.log('Right clicked on start menu');
-
-        }else if(event.target.className === 'Task-bar'){
-            console.log('Right clicked on task bar');
+        this.currentContextMenuOption = event.target.className;
+        this.setState({ visible: true });
+        const clickX = event.clientX;
+        const clickY = event.clientY;
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+        const rootW = this.root.offsetWidth;
+        const rootH = this.root.offsetHeight;
+        
+        const right = (screenW - clickX) > rootW;
+        const left = !right;
+        const top = (screenH - clickY) > rootH;
+        const bottom = !top;
+        
+        if (right) {
+            this.root.style.left = `${clickX + 5}px`;
         }
+        
+        if (left) {
+            this.root.style.left = `${clickX - rootW - 5}px`;
+        }
+        
+        if (top) {
+            this.root.style.top = `${clickY + 5}px`;
+        }
+        
+        if (bottom && this.currentContextMenuOption === 'Desktop-wallpaper') {
+            this.root.style.top = `${clickY - rootH - 5}px`;
+        }
+
+        if (bottom && (this.currentContextMenuOption === 'start-menu-button' || this.currentContextMenuOption === 'Task-bar')) {
+            this.root.style.top = `${clickY - rootH - 20}px`;
+        }
+
 
     };
 
@@ -90,8 +92,19 @@ class MyContextMenu extends Component {
     renderMenuItem(){
         console.log('Iterating menu item...');
         var contextMenuItems = [];
-        for(var i=0;i<this.state.contextMenuOption.length;i++){
-            contextMenuItems.push(<div key={this.state.contextMenuOption[i]} className="contextMenu--option">{this.state.contextMenuOption[i]}</div>);
+        var contextMenuOptionList;
+
+        if(this.currentContextMenuOption === 'Desktop-wallpaper'){
+            contextMenuOptionList = this.state.contextMenuOption;
+        }
+        else if(this.currentContextMenuOption === 'start-menu-button'){
+            contextMenuOptionList = this.state.startButtonContextMenuOption;    
+        }
+        else if(this.currentContextMenuOption === 'Task-bar'){
+            contextMenuOptionList = this.state.taskBarContextMenuOption;
+        }
+        for(var i=0;i<contextMenuOptionList.length;i++){
+            contextMenuItems.push(<div key={contextMenuOptionList[i]} className="contextMenu--option">{contextMenuOptionList[i]}</div>);
         }
         return contextMenuItems;
     }
