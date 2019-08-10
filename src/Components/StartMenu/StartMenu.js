@@ -1,21 +1,40 @@
 import React,{Component} from 'react';
 import $ from 'jquery';
-import './StartMenu.css';
+import './StartMenu.scss';
 class StartMenu extends Component{
 
-    
+  state = {
+    visible: false,
+    startMenuOption :['New Sprint','New User Story','Copy','Cut','Paste']
+    };
     render() {
-        return (<button className="start-menu" onClick={this.openStartMenu}>
+        return (
+        <div ref={ref => {this.root = ref}}>
+          <button className="start-menu-button" onClick={this.openStartMenu.bind(this)}
+          onContextMenu={this.onStartButtonRightClick.bind(this)}
+          onLeave={this.onLeave.bind(this)}
+          >
           
           Extras
           
-        </button>)
+        </button>
+        </div>
+)
       }
 
-      openStartMenu(){
-        console.log('Clicked start menu');
+      openStartMenu(event){
+        console.log('Clicked start menu'+this.state.visible);
+        const { visible } = this.state;
+        const wasOutside = !(event.target.contains === this.root);
+        
+        if (wasOutside && visible) this.setState({ visible: false, });
       }
 
+      onStartButtonRightClick = (event) => {
+        console.log('onStartButtonRightClick');
+        event.preventDefault();
+       // $("#panel").slideDown("slow");
+      };
       onEnter = () => {
         console.log('Mouse entered task bar');
        // $("#panel").slideDown("slow");

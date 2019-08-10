@@ -22,36 +22,43 @@ class MyContextMenu extends Component {
     
     _handleContextMenu = (event) => {
         event.preventDefault();
-        
-        this.setState({ visible: true });
-        
-        const clickX = event.clientX;
-        const clickY = event.clientY;
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-        const rootW = this.root.offsetWidth;
-        const rootH = this.root.offsetHeight;
-        
-        const right = (screenW - clickX) > rootW;
-        const left = !right;
-        const top = (screenH - clickY) > rootH;
-        const bottom = !top;
-        
-        if (right) {
-            this.root.style.left = `${clickX + 5}px`;
+        console.log(event.target.className);
+        if(event.target.className === 'Desktop-wallpaper'){
+            this.setState({ visible: true });
+            const clickX = event.clientX;
+            const clickY = event.clientY;
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+            const rootW = this.root.offsetWidth;
+            const rootH = this.root.offsetHeight;
+            
+            const right = (screenW - clickX) > rootW;
+            const left = !right;
+            const top = (screenH - clickY) > rootH;
+            const bottom = !top;
+            
+            if (right) {
+                this.root.style.left = `${clickX + 5}px`;
+            }
+            
+            if (left) {
+                this.root.style.left = `${clickX - rootW - 5}px`;
+            }
+            
+            if (top) {
+                this.root.style.top = `${clickY + 5}px`;
+            }
+            
+            if (bottom) {
+                this.root.style.top = `${clickY - rootH - 5}px`;
+            }
+        }else if(event.target.className === 'start-menu-button'){
+            console.log('Right clicked on start menu');
+
+        }else if(event.target.className === 'Task-bar'){
+            console.log('Right clicked on task bar');
         }
-        
-        if (left) {
-            this.root.style.left = `${clickX - rootW - 5}px`;
-        }
-        
-        if (top) {
-            this.root.style.top = `${clickY + 5}px`;
-        }
-        
-        if (bottom) {
-            this.root.style.top = `${clickY - rootH - 5}px`;
-        }
+
     };
 
     _handleClick = (event) => {
@@ -84,7 +91,7 @@ class MyContextMenu extends Component {
         console.log('Iterating menu item...');
         var contextMenuItems = [];
         for(var i=0;i<this.state.contextMenuOption.length;i++){
-            contextMenuItems.push(<div className="contextMenu--option">{this.state.contextMenuOption[i]}</div>);
+            contextMenuItems.push(<div key={this.state.contextMenuOption[i]} className="contextMenu--option">{this.state.contextMenuOption[i]}</div>);
         }
         return contextMenuItems;
     }
