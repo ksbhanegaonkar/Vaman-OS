@@ -5,6 +5,7 @@ import './Desktop.css';
 import TaskBar from '../TaskBar/TaskBar';
 import StartMenu from '../StartMenu/StartMenu';
 import MyContextMenu from '../ContextMenu/MyContextMennu';
+import DesktopItem from '../DesktopItem/DesktopItem';
 class Desktop extends Component{
 
   constructor(){
@@ -94,10 +95,19 @@ class Desktop extends Component{
       console.log(event.target);
     }
 
+    renderDesktopItems(){
+      var desktopItems = [];
+
+      for(var i=0;i<10;i++){
+        desktopItems.push(<DesktopItem></DesktopItem>);
+      }
+      return desktopItems;
+    }
 
     render() {
         return (<div 
         className="desktop-wallpaper">
+
         <MyContextMenu visible={this.state.contextMenuVisible} 
               xPosition={this.state.mouseXposition}
               yPosition={this.state.mouseYposition} 
@@ -107,10 +117,9 @@ class Desktop extends Component{
         ></MyContextMenu>
          <TaskBar></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
-          menuItemList={this.state.startMenuOption}
-         >
-
+          menuItemList={this.state.startMenuOption}>
          </StartMenu>
+         {this.renderDesktopItems()}
         </div>)
       }
 
