@@ -20,17 +20,11 @@ class MyContextMenu extends Component {
         };
 
         const clickX = this.props.xPosition;
-        console.log("clickX : "+clickX)
         const clickY = this.props.yPosition;
-        console.log("clickY : "+ clickY)
         const screenW = window.innerWidth;
-        console.log("screenW : "+ screenW)
         const screenH = window.innerHeight;
-        console.log("screenH : "+ screenH)
         const rootW = 100;
-        console.log("rootW : "+ rootW)
         const rootH = 100;
-        console.log("rootH : "+ rootH)
         
         const right = (screenW - clickX) > rootW;
         const left = !right;
@@ -53,7 +47,6 @@ class MyContextMenu extends Component {
         if (bottom) {
             style.top = `${clickY - rootH - 5}px`;
         }
-       console.log(style);
         return style;
 
 
@@ -73,7 +66,6 @@ class MyContextMenu extends Component {
     }
 
     renderMenuItem(){
-        console.log('Iterating menu item...');
         var contextMenuItems = [];
 
         for(var i=0;i<this.props.menuItemList.length;i++){

@@ -18,7 +18,7 @@ class Desktop extends Component{
   
   }
 
-  state = {
+  state = { 
     contextMenuVisible: false,
     startMenuVisible:false,
     mouseXposition:0,
@@ -57,9 +57,8 @@ class Desktop extends Component{
                 mouseButtonType:'right-click',
                 contextMenuVisible:true
               });
-              console.log(this.state);
         }
-        
+
 
     }
 
@@ -80,7 +79,7 @@ class Desktop extends Component{
             mouseButtonType:'left-click',
             contextMenuVisible:false
           });
-          console.log(this.state);
+
     };
 
     onContextMenuOptionClick(event){
