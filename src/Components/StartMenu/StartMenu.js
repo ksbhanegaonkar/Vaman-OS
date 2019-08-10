@@ -10,7 +10,7 @@ class StartMenu extends Component{
           {this.openStartMenu()}
           <button className="start-menu-button">
           
-          Extras
+          My Personal Space
           
         </button>
         </div>

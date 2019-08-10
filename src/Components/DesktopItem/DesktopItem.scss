@@ -1,10 +1,12 @@
 
- .desktop-item {
-    position: relative;
+ #desktop-item {
+    position: absolute;
     top: 10px;
     left: 10px;
     width: 50px;
     height: 60px;
+    background: #708090;
+
     & {
         
         
@@ -34,13 +36,13 @@
     }
 }
 
-.title{
+#title{
     position: relative;
     padding: 10px;
     font-size: 9px;
 }
 
-.file {
+#file {
     background:#eee;
     background:-moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
     background:-webkit-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
@@ -59,7 +61,7 @@
     margin-bottom: -8px;
     margin-top: 12px;
   }
-  .file:before {
+  #file:before {
     content: '';
     position: absolute;
     right:0;
@@ -76,7 +78,7 @@
     border-radius:0 10px 0 0;
   }
 
-  .file:after {
+  #file:after {
     content:"";
     display:block;
     position:absolute;
@@ -91,7 +93,7 @@
   }
 
 
-  .folder {
+  #folder {
     width: 30px;
     height: 20px;
     display: inline-block;
@@ -104,7 +106,7 @@
     margin-top: 12px;
   }
 
-  .folder:before {
+  #folder:before {
     content: '';
     width: 50%;
     height: 0.2em;

@@ -6,20 +6,19 @@ import TaskBar from '../TaskBar/TaskBar';
 import StartMenu from '../StartMenu/StartMenu';
 import MyContextMenu from '../ContextMenu/MyContextMennu';
 import DesktopItem from '../DesktopItem/DesktopItem';
+import { visitLexicalEnvironment } from 'typescript';
 class Desktop extends Component{
 
   constructor(){
     super();
     this.state.contextMenuOption = {
-      "desktop-wallpaper":['New Sprint','New User Story','Copy','Cut','Paste'],
+      "desktop-wallpaper":['New Sprint','New User Story','Refresh','Copy','Cut','Paste'],
       "start-menu-button":['Option 1','Option 2','Option 3','Option 4'],
       "task-bar":['Option 5','Option 6','Option 7','Option 8'],
-      "folder":['Open folder','Open folder in new window','Copy Folder','Delete Folder'],
-      "file":['Open file','Open file in new window','Copy file','Delete file'],
-      "title":['Rename'],
-      "desktop-item":['New Sprint','New User Story','Copy','Cut','Paste']
+      "desktop-item-folder":['Open folder','Open folder in new window','Bookmark folder','Copy Folder','Rename Folder','Delete Folder'],
+      "desktop-item-file":['Open file','Open file in new window','Bookmark file','Copy file','Rename File','Delete file']
     };
-    this.state.startMenuOption =['Start menu optionn 1','Start menu optionn 2','Start menu optionn 3','Start menu optionn 4'];
+    this.state.startMenuOption =['My Folder','My Bookmarks','My Notes','Logout'];
     
     
 
@@ -38,14 +37,20 @@ class Desktop extends Component{
 };
 
     componentDidMount() {
+      document.addEventListener('dragend', this.onDragFinish.bind(this));
       document.addEventListener('contextmenu', this.handleContextMenu.bind(this));
       document.addEventListener('click', this.handleClick.bind(this));
+      //document.addEventListener('drag', this.mouseUp.bind(this));
+
       //document.addEventListener('scroll', this._handleScroll);
     };
 
     componentWillUnmount() {
+    document.removeEventListener('dragend', this.onDragFinish.bind(this));
     document.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
     document.removeEventListener('click', this.handleClick.bind(this));
+    //document.removeEventListener('drag', this.mouseUp.bind(this));
+
     //document.removeEventListener('scroll', this._handleScroll);
     }
 
@@ -55,10 +60,8 @@ class Desktop extends Component{
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
         ||componentClicked === 'task-bar' 
-        ||componentClicked === 'desktop-item'
-        ||componentClicked === 'folder'
-        ||componentClicked === 'file'
-        ||componentClicked === 'title' ){
+        ||componentClicked === 'desktop-item-folder'
+        ||componentClicked === 'desktop-item-file'){
           event.preventDefault();
           const xPosition = event.clientX;
           const yPosition = event.clientY;
@@ -79,26 +82,39 @@ class Desktop extends Component{
 
 
     handleClick(event){
-      event.preventDefault();
-      const xPosition = event.clientX;
-      const yPosition = event.clientY;
-      const componentClicked = event.target.className;
-      var isStartMenuVisible = false;
-      if(componentClicked === 'start-menu-button'){
-        isStartMenuVisible=true;
-      }
+      //event.preventDefault();
+        const componentClicked = event.target.className;
+        console.log('class name from left click : '+componentClicked);
+        var isStartMenuVisible = false;
+        if(componentClicked === 'start-menu-button'){
+          isStartMenuVisible=true;
+        }
+        this.setState(
+            { 
+              contextMenuVisible:false,
+              startMenuVisible:isStartMenuVisible
+            });
+      
 
-
-      this.setState(
-          { mouseXposition:xPosition,
-            mouseYposition:yPosition,
-            clickedComponentClass:componentClicked,
-            mouseButtonType:'left-click',
-            contextMenuVisible:false,
-            startMenuVisible:isStartMenuVisible
-          });
 
     };
+
+
+    onDragFinish(event) {
+      if(event.target.className.includes('desktop-item')){
+        console.log('true');
+        console.log('On mouse finish'+event.target.style);
+        console.log(event.clientX+" and "+event.clientY);
+        event.target.style.left=`${event.clientX-event.clientX%70-25}px`;
+        event.target.style.top=`${event.clientY-event.clientY%80-25}px`;
+
+      }
+
+    }
+    
+    mouseUp(event) {
+      console.log('On mouse drag');
+    }
 
     onContextMenuOptionClick(event){
       console.log(event.target);
@@ -108,9 +124,9 @@ class Desktop extends Component{
       var desktopItems = [];
       desktopItems.push(<DesktopItem name="My folder" type="folder"></DesktopItem>);
       desktopItems.push(<DesktopItem name="My file" type="file"></DesktopItem>);
-      /*for(var i=0;i<2;i++){
-        desktopItems.push(<DesktopItem></DesktopItem>);
-      }*/
+      // for(var i=0;i<20;i++){
+      //   desktopItems.push(<DesktopItem></DesktopItem>);
+      // }
       return desktopItems;
     }
 
