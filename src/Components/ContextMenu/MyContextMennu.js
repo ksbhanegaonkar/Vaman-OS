@@ -5,6 +5,7 @@ import './MyContextMenu.scss';
 class MyContextMenu extends Component {
     state = {
         visible: false,
+        contextMenuOption :['New Sprint','New User Story','Copy','Cut','Paste']
     };
     
     componentDidMount() {
@@ -71,18 +72,21 @@ class MyContextMenu extends Component {
         
         return(visible || null) && 
             <div ref={ref => {this.root = ref}} className="contextMenu">
-                <div className="contextMenu--option" onClick={this.shareThis}>Share this</div>
-                <div className="contextMenu--option">New window</div>
-                <div className="contextMenu--option">Visit official site</div>
-                <div className="contextMenu--option contextMenu--option__disabled">View full version</div>
-                <div className="contextMenu--option">Settings</div>
-                <div className="contextMenu--separator" />
-                <div className="contextMenu--option">About this app</div>
+                {this.renderMenuItem()}
             </div>
     };
 
     shareThis(){
         console.log("Share this");
+    }
+
+    renderMenuItem(){
+        console.log('Iterating menu item...');
+        var contextMenuItems = [];
+        for(var i=0;i<this.state.contextMenuOption.length;i++){
+            contextMenuItems.push(<div className="contextMenu--option">{this.state.contextMenuOption[i]}</div>);
+        }
+        return contextMenuItems;
     }
 }
 
