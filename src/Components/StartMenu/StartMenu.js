@@ -9,10 +9,9 @@ class StartMenu extends Component{
     };
     render() {
         return (
-        <div ref={ref => {this.root = ref}}>
-          <button className="start-menu-button" onClick={this.openStartMenu.bind(this)}
-          
-          >
+        <div className="start-Menu-content">
+          {this.openStartMenu()}
+          <button className="start-menu-button">
           
           Extras
           
@@ -21,25 +20,28 @@ class StartMenu extends Component{
 )
       }
 
-      openStartMenu(event){
-        const { visible } = this.state;
-        const wasOutside = !(event.target.contains === this.root);
-        
-        if (wasOutside && visible) this.setState({ visible: false, });
+      openStartMenu(){
+       if(this.props.visible){
+        console.log('visible');
+
+
+       var contextMenuItems = [];
+
+       for(var i=0;i<this.props.menuItemList.length;i++){
+           contextMenuItems.push(<div key={this.props.menuItemList[i]} className="start-Menu-content--option"
+           
+           onClick={this.props.onContextMenuClick}
+           
+           >{this.props.menuItemList[i]}</div>);
+       }
+       return contextMenuItems;
+
+       }else{
+        console.log('not visible');
+       }
+
       }
 
-      onStartButtonRightClick = (event) => {
-        console.log('onStartButtonRightClick');
-        event.preventDefault();
-       // $("#panel").slideDown("slow");
-      };
-      onEnter = () => {
-        console.log('Mouse entered task bar');
-       // $("#panel").slideDown("slow");
-      };
-      onLeave = () => {
-        console.log('Mouse left task bar');
-       // $("#panel").slideUp("slow");
-      };
+ 
 }
 export default StartMenu;

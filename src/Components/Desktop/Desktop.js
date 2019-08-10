@@ -69,7 +69,10 @@ class Desktop extends Component{
       const xPosition = event.clientX;
       const yPosition = event.clientY;
       const componentClicked = event.target.className;
-
+      var isStartMenuVisible = false;
+      if(componentClicked === 'start-menu-button'){
+        isStartMenuVisible=true;
+      }
 
 
       this.setState(
@@ -77,7 +80,8 @@ class Desktop extends Component{
             mouseYposition:yPosition,
             clickedComponentClass:componentClicked,
             mouseButtonType:'left-click',
-            contextMenuVisible:false
+            contextMenuVisible:false,
+            startMenuVisible:isStartMenuVisible
           });
 
     };
@@ -85,6 +89,7 @@ class Desktop extends Component{
     onContextMenuOptionClick(event){
       console.log(event.target);
     }
+
 
     render() {
         return (<div 
@@ -97,7 +102,11 @@ class Desktop extends Component{
               
         ></MyContextMenu>
          <TaskBar></TaskBar>
-         <StartMenu></StartMenu>
+         <StartMenu visible={this.state.startMenuVisible}
+          menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
+         >
+
+         </StartMenu>
         </div>)
       }
 
