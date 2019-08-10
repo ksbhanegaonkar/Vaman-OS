@@ -5,8 +5,8 @@ class DesktopItem extends Component{
 
     render() {
         return (<div className="desktop-item">
-
-           My Personal Space
+            <div className={this.props.type}></div>
+           <div className="title">{this.props.name}</div>
 
         </div>)
       }

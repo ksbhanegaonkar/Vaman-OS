@@ -13,7 +13,11 @@ class Desktop extends Component{
     this.state.contextMenuOption = {
       "desktop-wallpaper":['New Sprint','New User Story','Copy','Cut','Paste'],
       "start-menu-button":['Option 1','Option 2','Option 3','Option 4'],
-      "task-bar":['Option 5','Option 6','Option 7','Option 8']
+      "task-bar":['Option 5','Option 6','Option 7','Option 8'],
+      "folder":['Open folder','Open folder in new window','Copy Folder','Delete Folder'],
+      "file":['Open file','Open file in new window','Copy file','Delete file'],
+      "title":['Rename'],
+      "desktop-item":['New Sprint','New User Story','Copy','Cut','Paste']
     };
     this.state.startMenuOption =['Start menu optionn 1','Start menu optionn 2','Start menu optionn 3','Start menu optionn 4'];
     
@@ -47,9 +51,14 @@ class Desktop extends Component{
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
+      console.log(componentClicked);
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
-        ||componentClicked === 'task-bar' ){
+        ||componentClicked === 'task-bar' 
+        ||componentClicked === 'desktop-item'
+        ||componentClicked === 'folder'
+        ||componentClicked === 'file'
+        ||componentClicked === 'title' ){
           event.preventDefault();
           const xPosition = event.clientX;
           const yPosition = event.clientY;
@@ -97,10 +106,11 @@ class Desktop extends Component{
 
     renderDesktopItems(){
       var desktopItems = [];
-
-      for(var i=0;i<10;i++){
+      desktopItems.push(<DesktopItem name="My folder" type="folder"></DesktopItem>);
+      desktopItems.push(<DesktopItem name="My file" type="file"></DesktopItem>);
+      /*for(var i=0;i<2;i++){
         desktopItems.push(<DesktopItem></DesktopItem>);
-      }
+      }*/
       return desktopItems;
     }
 
