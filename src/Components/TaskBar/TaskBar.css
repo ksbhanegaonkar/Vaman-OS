@@ -8,3 +8,16 @@
     color: white;
     text-align: center;
  }
+ .os-info{
+     position: fixed;
+     right: 0;
+     font-size: 20px;
+ }
+
+ .developer{
+    position: fixed;
+    font-family: 'Courier New', Courier, monospace;
+    right: 0px;
+    bottom: 0px;
+    font-size: 8px;
+}

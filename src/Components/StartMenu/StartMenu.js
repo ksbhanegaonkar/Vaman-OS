@@ -3,10 +3,7 @@ import $ from 'jquery';
 import './StartMenu.scss';
 class StartMenu extends Component{
 
-  state = {
-    visible: false,
-    startMenuOption :['New Sprint','New User Story','Copy','Cut','Paste']
-    };
+
     render() {
         return (
         <div className="start-Menu-content">

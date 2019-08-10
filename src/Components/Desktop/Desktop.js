@@ -14,6 +14,9 @@ class Desktop extends Component{
       "start-menu-button":['Option 1','Option 2','Option 3','Option 4'],
       "task-bar":['Option 5','Option 6','Option 7','Option 8']
     };
+    this.state.startMenuOption =['Start menu optionn 1','Start menu optionn 2','Start menu optionn 3','Start menu optionn 4'];
+    
+    
 
   
   }
@@ -55,7 +58,8 @@ class Desktop extends Component{
                 mouseYposition:yPosition,
                 clickedComponentClass:componentClicked,
                 mouseButtonType:'right-click',
-                contextMenuVisible:true
+                contextMenuVisible:true,
+                startMenuVisible:false
               });
         }
 
@@ -103,7 +107,7 @@ class Desktop extends Component{
         ></MyContextMenu>
          <TaskBar></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
-          menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
+          menuItemList={this.state.startMenuOption}
          >
 
          </StartMenu>
