@@ -25,7 +25,7 @@ class MyContextMenu extends Component {
     
     _handleContextMenu = (event) => {
         event.preventDefault();
-        console.log(event.target.className);
+       
         this.currentContextMenuOption = event.target.className;
         this.setState({ visible: true });
         const clickX = event.clientX;
@@ -52,14 +52,10 @@ class MyContextMenu extends Component {
             this.root.style.top = `${clickY + 5}px`;
         }
         
-        if (bottom && this.currentContextMenuOption === 'Desktop-wallpaper') {
+        if (bottom) {
             this.root.style.top = `${clickY - rootH - 5}px`;
         }
-
-        if (bottom && (this.currentContextMenuOption === 'start-menu-button' || this.currentContextMenuOption === 'Task-bar')) {
-            this.root.style.top = `${clickY - rootH - 20}px`;
-        }
-
+        this.root.style.zIndex='1';
 
     };
 
