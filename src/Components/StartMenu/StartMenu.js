@@ -22,7 +22,6 @@ class StartMenu extends Component{
       }
 
       openStartMenu(event){
-        console.log('Clicked start menu'+this.state.visible);
         const { visible } = this.state;
         const wasOutside = !(event.target.contains === this.root);
         

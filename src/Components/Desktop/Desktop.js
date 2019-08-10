@@ -87,14 +87,13 @@ class Desktop extends Component{
     }
 
     render() {
-        return (<div ref={(ref)=>this.root=ref}
+        return (<div 
         className="desktop-wallpaper">
         <MyContextMenu visible={this.state.contextMenuVisible} 
               xPosition={this.state.mouseXposition}
               yPosition={this.state.mouseYposition} 
               menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
-              onContextMenuClick={this.onContextMenuOptionClick.bind(this)}
-              parentRoot={this.root}            
+              onContextMenuClick={this.onContextMenuOptionClick.bind(this)}         
               
         ></MyContextMenu>
          <TaskBar></TaskBar>
