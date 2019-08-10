@@ -42,19 +42,28 @@ class Desktop extends Component{
     }
 
     handleContextMenu(event){
-      event.preventDefault();
-      const xPosition = event.clientX;
-      const yPosition = event.clientY;
       const componentClicked = event.target.className;
-      this.setState(
-          { mouseXposition:xPosition,
-            mouseYposition:yPosition,
-            clickedComponentClass:componentClicked,
-            mouseButtonType:'right-click',
-            contextMenuVisible:true
-          });
-          console.log(this.state);
+      if(componentClicked === 'desktop-wallpaper' 
+        ||componentClicked === 'start-menu-button' 
+        ||componentClicked === 'task-bar' ){
+          event.preventDefault();
+          const xPosition = event.clientX;
+          const yPosition = event.clientY;
+          
+          this.setState(
+              { mouseXposition:xPosition,
+                mouseYposition:yPosition,
+                clickedComponentClass:componentClicked,
+                mouseButtonType:'right-click',
+                contextMenuVisible:true
+              });
+              console.log(this.state);
+        }
+        
+
     }
+
+
 
     handleClick(event){
       event.preventDefault();
@@ -81,10 +90,13 @@ class Desktop extends Component{
     render() {
         return (<div ref={(ref)=>this.root=ref}
         className="desktop-wallpaper">
-        <MyContextMenu visible={this.state.contextMenuVisible} top="50px" 
-              left="100px" 
+        <MyContextMenu visible={this.state.contextMenuVisible} 
+              xPosition={this.state.mouseXposition}
+              yPosition={this.state.mouseYposition} 
               menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
               onContextMenuClick={this.onContextMenuOptionClick.bind(this)}
+              parentRoot={this.root}            
+              
         ></MyContextMenu>
          <TaskBar></TaskBar>
          <StartMenu></StartMenu>

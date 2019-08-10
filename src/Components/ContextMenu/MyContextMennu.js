@@ -11,15 +11,59 @@ class MyContextMenu extends Component {
         taskBarContextMenuOption :['Option 5','Option 6','Option 7','Option 8']
     };
     
+    calculateTopLeftCredential(){
+
+        var style = {
+            position:'absolute',
+            top:0,
+            left:0
+        };
+
+        const clickX = this.props.xPosition;
+        console.log("clickX : "+clickX)
+        const clickY = this.props.yPosition;
+        console.log("clickY : "+ clickY)
+        const screenW = window.innerWidth;
+        console.log("screenW : "+ screenW)
+        const screenH = window.innerHeight;
+        console.log("screenH : "+ screenH)
+        const rootW = 100;
+        console.log("rootW : "+ rootW)
+        const rootH = 100;
+        console.log("rootH : "+ rootH)
+        
+        const right = (screenW - clickX) > rootW;
+        const left = !right;
+        const top = (screenH - clickY) > rootH;
+        const bottom = !top;
+
+        
+        if (right) {
+            style.left = `${clickX + 5}px`;
+        }
+        
+        if (left) {
+            style.left = `${clickX - rootW - 5}px`;
+        }
+        
+        if (top) {
+            style.top = `${clickY + 5}px`;
+        }
+        
+        if (bottom) {
+            style.top = `${clickY - rootH - 5}px`;
+        }
+       console.log(style);
+        return style;
+
+
+    }
+
     render(){
         if(this.props.visible){
-            const style = {
-                position:'absolute',
-                top:this.props.top,
-                left:this.props.left
-            };
+
             return(
-                <div className="contextMenu" style={style}>
+                <div className="contextMenu" style={this.calculateTopLeftCredential()}>
                     {this.renderMenuItem()}
                 </div>
             );
