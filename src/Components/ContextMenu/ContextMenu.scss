@@ -1,23 +1,9 @@
-/*#root {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(75deg, #00E39F, #00C4E1);
-    
-   &::before {
-        content: 'Right click anywhere on the screen!';
-        font-family: sans-serif;
-        font-size: 12px;
-        color: white;
-    }
-}
-*/
-.contextMenu {
+
+.contextMenuOld {
     position: fixed;
-    background: rgba(1, 5, 0, 0.863);
+    background: rgba(12, 7, 7, 0.863);
     box-shadow: 0px 2px 10px #999999;
-    z-index: 1;
+    
     &--option {
         padding: 6px 50px 5px 10px;
         min-width: 160px;

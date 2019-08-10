@@ -5,7 +5,7 @@ import StartMenu from '../StartMenu/StartMenu';
 class TaskBar extends Component{
 
     render() {
-        return (<div className="Task-bar">
+        return (<div className="task-bar">
         </div>)
       }
 

@@ -11,8 +11,7 @@ class StartMenu extends Component{
         return (
         <div ref={ref => {this.root = ref}}>
           <button className="start-menu-button" onClick={this.openStartMenu.bind(this)}
-          onContextMenu={this.onStartButtonRightClick.bind(this)}
-          onLeave={this.onLeave.bind(this)}
+          
           >
           
           Extras
