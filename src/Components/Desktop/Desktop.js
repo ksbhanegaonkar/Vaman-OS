@@ -105,8 +105,13 @@ class Desktop extends Component{
         console.log('true');
         console.log('On mouse finish'+event.target.style);
         console.log(event.clientX+" and "+event.clientY);
+        
+        /*This is used for grid alignment of icons
         event.target.style.left=`${event.clientX-event.clientX%70-25}px`;
-        event.target.style.top=`${event.clientY-event.clientY%80-25}px`;
+        event.target.style.top=`${event.clientY-event.clientY%80-25}px`;*/
+
+        event.target.style.left=`${event.clientX-30}px`;
+        event.target.style.top=`${event.clientY-30}px`;
 
       }
 

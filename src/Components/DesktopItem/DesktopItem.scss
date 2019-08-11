@@ -1,11 +1,13 @@
 
- #desktop-item {
+ .desktop-item-file {
     position: absolute;
     top: 10px;
     left: 10px;
     width: 50px;
     height: 60px;
-    background: #708090;
+    background: #f5f4f1;
+    //background-image:url(/src/images/images.png);
+    display:block;
 
     & {
         
@@ -13,7 +15,7 @@
         cursor: default;
 
         &:hover {
-            background: linear-gradient(to top, #555, #333);
+            background: linear-gradient(to top, rgb(168, 165, 165), #333);
             color: white;
         }
         
@@ -36,12 +38,52 @@
     }
 }
 
-#title{
-    position: relative;
-    padding: 10px;
-    font-size: 9px;
+
+.desktop-item-folder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 60px;
+  box-shadow: rgb(223, 5, 5);
+  background: #ecc308;
+  display:block;
+
+  & {
+      
+      
+      cursor: default;
+
+      &:hover {
+          background: linear-gradient(to top, rgb(138, 124, 4), #333);
+          color: white;
+      }
+      
+      &:active {
+          color: #e9e9e9;
+          background: linear-gradient(to top, #555, #444);
+      }
+      
+      &__disabled {
+          color: #999999;
+          pointer-events: none;
+      }
+  }
+  
+  &--separator {
+      width: 100%;
+      height: 1px;
+      background: #CCCCCC;
+      margin: 0 0 0 0;
+  }
 }
 
+#title{
+  position: relative;
+  padding: 10px;
+  font-size: 9px;
+}
+/*
 #file {
     background:#eee;
     background:-moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
@@ -101,7 +143,7 @@
     position: relative;
     background-color: #708090;
     border-radius: 0 3px 3px 3px;
-    /*box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);*/
+    /*box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.59);
     margin-bottom: -8px;
     margin-top: 12px;
   }
@@ -116,3 +158,4 @@
     top: -0.2em;
     left: 0px;
   }
+*/
