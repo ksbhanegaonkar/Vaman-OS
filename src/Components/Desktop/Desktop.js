@@ -9,8 +9,10 @@ import DesktopItem from '../DesktopItem/DesktopItem';
 import { visitLexicalEnvironment } from 'typescript';
 class Desktop extends Component{
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
+   
+
     this.state.contextMenuOption = {
       "desktop-wallpaper":['New Sprint','New User Story','Refresh','Copy','Cut','Paste'],
       "start-menu-button":['Option 1','Option 2','Option 3','Option 4'],
@@ -43,6 +45,11 @@ class Desktop extends Component{
       //document.addEventListener('drag', this.mouseUp.bind(this));
 
       //document.addEventListener('scroll', this._handleScroll);
+      fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/getContextMenuList"))
+      .then((res)=>res.json())
+      .then(data=>{
+        this.setState({startMenuOption:data['start-button-menu']});
+      });
     };
 
     componentWillUnmount() {
