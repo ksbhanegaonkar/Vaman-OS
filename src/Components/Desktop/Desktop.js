@@ -34,6 +34,7 @@ class Desktop extends Component{
     mouseYposition:0,
     mouseButtonType:'',
     clickedComponentClass:''
+    
 
 
 };
@@ -48,7 +49,17 @@ class Desktop extends Component{
       fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/getContextMenuList"))
       .then((res)=>res.json())
       .then(data=>{
-        this.setState({startMenuOption:data['start-button-menu']});
+
+        var menuOptions =
+        {
+          "desktop-wallpaper":data['desktop-wallpaper'],
+          "start-menu-button":data['start-button-context-menu'],
+          "task-bar":data['task-bar'],
+          "desktop-item-folder":data['desktop-item-folder'],
+          "desktop-item-file":data['desktop-item-file']
+        };
+
+        this.setState({startMenuOption:data['start-button-menu'],contextMenuOption:menuOptions});
       });
     };
 
