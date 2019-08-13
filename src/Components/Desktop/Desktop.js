@@ -93,9 +93,27 @@ class Desktop extends Component{
                 startMenuVisible:false
               });
         }
+         var data1 = {username: 'example'};
+        fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
+          {
+             method: 'POST', // or 'PUT'
+             //mode:"no-cors",
+             body: JSON.stringify(data1), // data can be `string` or {object}!
+             headers:{
+               'Content-Type': 'text/plain'
+               ,'Access-Control-Allow-Origin':"*"
+             }}
+             )
+        .then((res)=>res.json())
+        .then(data=>{
+          console.log(data);
+          
+        });
+      }
 
 
-    }
+    
+  
 
 
 
@@ -145,8 +163,8 @@ class Desktop extends Component{
 
     renderDesktopItems(){
       var desktopItems = [];
-      desktopItems.push(<DesktopItem name="My folder" type="folder"></DesktopItem>);
-      desktopItems.push(<DesktopItem name="My file" type="file"></DesktopItem>);
+      desktopItems.push(<DesktopItem key="item1"  name="My folder" type="folder"></DesktopItem>);
+      desktopItems.push(<DesktopItem key="item2" name="My file" type="file"></DesktopItem>);
       // for(var i=0;i<20;i++){
       //   desktopItems.push(<DesktopItem></DesktopItem>);
       // }
