@@ -7,6 +7,7 @@ import StartMenu from '../StartMenu/StartMenu';
 import MyContextMenu from '../ContextMenu/MyContextMennu';
 import DesktopItem from '../DesktopItem/DesktopItem';
 import { visitLexicalEnvironment } from 'typescript';
+import DesktopItemView from '../DesktopItemView/DesktopItemView';
 class Desktop extends Component{
 
   constructor(props){
@@ -44,8 +45,20 @@ class Desktop extends Component{
       document.addEventListener('contextmenu', this.handleContextMenu.bind(this));
       document.addEventListener('click', this.handleClick.bind(this));
       //document.addEventListener('drag', this.mouseUp.bind(this));
-
       //document.addEventListener('scroll', this._handleScroll);
+      this.initDesktop();
+
+    }
+
+    componentWillUnmount() {
+    document.removeEventListener('dragend', this.onDragFinish.bind(this));
+    document.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
+    document.removeEventListener('click', this.handleClick.bind(this));
+    //document.removeEventListener('drag', this.mouseUp.bind(this));
+    //document.removeEventListener('scroll', this._handleScroll);
+    }
+
+    initDesktop(){
       fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/getContextMenuList"))
       .then((res)=>res.json())
       .then(data=>{
@@ -61,15 +74,6 @@ class Desktop extends Component{
 
         this.setState({startMenuOption:data['start-button-menu'],contextMenuOption:menuOptions});
       });
-    };
-
-    componentWillUnmount() {
-    document.removeEventListener('dragend', this.onDragFinish.bind(this));
-    document.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
-    document.removeEventListener('click', this.handleClick.bind(this));
-    //document.removeEventListener('drag', this.mouseUp.bind(this));
-
-    //document.removeEventListener('scroll', this._handleScroll);
     }
 
     handleContextMenu(event){
@@ -92,13 +96,21 @@ class Desktop extends Component{
                 contextMenuVisible:true,
                 startMenuVisible:false
               });
+
+              this.sendDesktopUpdate(event.target.innerText);
         }
-         var data1 = {username: 'example'};
+
+      }
+
+
+    
+      sendDesktopUpdate(obj){
+        
         fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
           {
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
-             body: JSON.stringify(data1), // data can be `string` or {object}!
+             body: JSON.stringify(obj), // data can be `string` or {object}!
              headers:{
                'Content-Type': 'text/plain'
                ,'Access-Control-Allow-Origin':"*"
@@ -110,10 +122,6 @@ class Desktop extends Component{
           
         });
       }
-
-
-    
-  
 
 
 
@@ -130,8 +138,9 @@ class Desktop extends Component{
               contextMenuVisible:false,
               startMenuVisible:isStartMenuVisible
             });
-      
-
+            
+            this.sendDesktopUpdate(event.target.innerText);
+            
 
     };
 
@@ -187,6 +196,7 @@ class Desktop extends Component{
           menuItemList={this.state.startMenuOption}>
          </StartMenu>
          {this.renderDesktopItems()}
+         <DesktopItemView></DesktopItemView>
         </div>)
       }
 
