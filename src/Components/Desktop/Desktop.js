@@ -37,8 +37,9 @@ class Desktop extends Component{
     clickedComponentClass:'',
     
     desktopItems:{},
-    desktopItemViews:{}
+    desktopItemViews:{},
 
+    taskBarItems:{}
 
 };
 
@@ -191,8 +192,6 @@ class Desktop extends Component{
       var columnNo =1;
       var horizontalGridSize=90;
       var vertialGridSize=100;
-  
-
        for(var item in this.state.desktopItems){
         desktopItemList.push(<DesktopItem type={this.state.desktopItems[item]}
         key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
@@ -209,15 +208,35 @@ class Desktop extends Component{
     }
 
     onDesktopIconDoubleClick(name){
-      console.log("double clicked on "+name);
+      var newTaskBarItems = this.state.taskBarItems;
+      newTaskBarItems[name] = 'block';
+      this.setState({taskBarItems:newTaskBarItems});
+      console.log(this.state.taskBarItems);
+      console.log("double clicked on "+name);      
       this.sendDesktopUpdate({state:"update",action:"on-double-click",desktopItem:name});
-
     }
 
     onDesktopItemViewClose(name){
       console.log("double clicked on "+name);
       this.sendDesktopUpdate({state:"update",action:"on-close",desktopItem:name});
+      var newTaskBarItems = this.state.taskBarItems;
+      delete newTaskBarItems[name];
+      this.setState({taskBarItems:newTaskBarItems});
+      console.log(this.state.taskBarItems);
+    }
 
+    onDesktopItemViewMinimize(name){
+      console.log("minimize clicked ::: "+name);
+      var newTaskBarItems = this.state.taskBarItems;
+      newTaskBarItems[name] = 'none';
+      this.setState({taskBarItems:newTaskBarItems});
+    }
+
+    onDesktopItemViewActive(name){
+      console.log("minimize clicked ::: "+name);
+      var newTaskBarItems = this.state.taskBarItems;
+      newTaskBarItems[name] = 'block';
+      this.setState({taskBarItems:newTaskBarItems});
     }
 
     renderDesktopItemView(){
@@ -226,8 +245,11 @@ class Desktop extends Component{
         desktopItemViewList.push(<DesktopItemView
           key={item} name={item} 
           onClose={this.onDesktopItemViewClose.bind(this)}
+          onMinimize={this.onDesktopItemViewMinimize.bind(this)}
+          activeStatus={this.state.taskBarItems[item]}
         ></DesktopItemView>);
        }
+       console.log("test :::::: "+this.state.taskBarItems[item]);
       return desktopItemViewList;
     }
 
@@ -241,7 +263,10 @@ class Desktop extends Component{
               menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
               onContextMenuClick={this.onContextMenuOptionClick.bind(this)}>
           </MyContextMenu>
-         <TaskBar></TaskBar>
+         <TaskBar taskBarItems={this.state.taskBarItems}
+         onActive={this.onDesktopItemViewActive.bind(this)}
+         onMinimize={this.onDesktopItemViewMinimize.bind(this)}
+         ></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}> 
          </StartMenu>
