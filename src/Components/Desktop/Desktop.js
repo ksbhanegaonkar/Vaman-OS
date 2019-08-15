@@ -34,8 +34,9 @@ class Desktop extends Component{
     mouseXposition:0,
     mouseYposition:0,
     mouseButtonType:'',
-    clickedComponentClass:''
+    clickedComponentClass:'',
     
+    desktopItems:{}
 
 
 };
@@ -59,11 +60,13 @@ class Desktop extends Component{
     }
 
     initDesktop(){
+ /*     var newState = this.state;
+      var menuOptions;
       fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/getContextMenuList"))
       .then((res)=>res.json())
       .then(data=>{
 
-        var menuOptions =
+        menuOptions =
         {
           "desktop-wallpaper":data['desktop-wallpaper'],
           "start-menu-button":data['start-button-context-menu'],
@@ -71,9 +74,12 @@ class Desktop extends Component{
           "desktop-item-folder":data['desktop-item-folder'],
           "desktop-item-file":data['desktop-item-file']
         };
-
-        this.setState({startMenuOption:data['start-button-menu'],contextMenuOption:menuOptions});
+        this.setState({contextMenuOption:menuOptions});
+        
       });
+
+     */
+    this.sendDesktopUpdate({state:"init"});
     }
 
     handleContextMenu(event){
@@ -97,7 +103,7 @@ class Desktop extends Component{
                 startMenuVisible:false
               });
 
-              this.sendDesktopUpdate(event.target.innerText);
+             // this.sendDesktopUpdate(event.target.innerText);
         }
 
       }
@@ -118,7 +124,12 @@ class Desktop extends Component{
              )
         .then((res)=>res.json())
         .then(data=>{
-          console.log(data);
+          console.log(data['desktop-items']);
+          this.setState({
+            startMenuOption:data['start-menu-list'],
+            contextMenuOption:data['context-menu-list'],
+            desktopItems:data['desktop-items']
+          });
           
         });
       }
@@ -139,7 +150,7 @@ class Desktop extends Component{
               startMenuVisible:isStartMenuVisible
             });
             
-            this.sendDesktopUpdate(event.target.innerText);
+            //this.sendDesktopUpdate(event.target.innerText);
             
 
     };
@@ -171,13 +182,35 @@ class Desktop extends Component{
     }
 
     renderDesktopItems(){
-      var desktopItems = [];
-      desktopItems.push(<DesktopItem key="item1"  name="My folder" type="folder"></DesktopItem>);
-      desktopItems.push(<DesktopItem key="item2" name="My file" type="file"></DesktopItem>);
+      var desktopItemList = [];
+      var rowNo =1;
+      var columnNo =1;
+      var horizontalGridSize=90;
+      var vertialGridSize=100;
+  
+
+       for(var item in this.state.desktopItems){
+        desktopItemList.push(<DesktopItem type={this.state.desktopItems[item]}
+        key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
+        ></DesktopItem>);
+        rowNo++;
+        if(rowNo >5){
+          rowNo=1;
+          columnNo++;
+        }
+        
+       }
+      return desktopItemList;
+    }
+
+    renderDesktopItemView(){
+      var desktopItemViewList = [];
+      desktopItemViewList.push(<DesktopItemView></DesktopItemView>);
+      //desktopItems.push(<DesktopItem key="item2" name="My file" type="file"></DesktopItem>);
       // for(var i=0;i<20;i++){
       //   desktopItems.push(<DesktopItem></DesktopItem>);
       // }
-      return desktopItems;
+      return desktopItemViewList;
     }
 
     render() {
@@ -188,15 +221,14 @@ class Desktop extends Component{
               xPosition={this.state.mouseXposition}
               yPosition={this.state.mouseYposition} 
               menuItemList={this.state.contextMenuOption[this.state.clickedComponentClass]}
-              onContextMenuClick={this.onContextMenuOptionClick.bind(this)}         
-              
-        ></MyContextMenu>
+              onContextMenuClick={this.onContextMenuOptionClick.bind(this)}>
+          </MyContextMenu>
          <TaskBar></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}>
          </StartMenu>
          {this.renderDesktopItems()}
-         <DesktopItemView></DesktopItemView>
+         
         </div>)
       }
 

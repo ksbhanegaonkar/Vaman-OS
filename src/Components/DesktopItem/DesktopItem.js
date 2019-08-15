@@ -4,9 +4,18 @@ import './DesktopItem.scss';
 class DesktopItem extends Component{
 
     render() {
-        return (<span className={"desktop-item-"+this.props.type}>
-            { //<div id = {this.props.type} className={"desktop-item-"+this.props.type}></div>
-          /* <div id="title" className={"desktop-item-"+this.props.type}>{this.props.name}</div> */}
+
+      var style={
+        top:this.props.top,
+        left:this.props.left
+      };
+        return (<span className={"desktop-item"}
+          style={style}
+        >
+
+        
+          <div id = {this.props.type} className={"desktop-item-"+this.props.type}></div>
+          <div id="title" className={"desktop-item-"+this.props.type}>{this.props.name}</div> 
            
         </span>)
       }
