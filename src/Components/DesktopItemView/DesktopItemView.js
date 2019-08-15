@@ -9,7 +9,9 @@ class DesktopItemView extends Component{
            <div className="top-bar">
            <div className="top-bar-button-pallet">
                     <button className="minimize-it">-</button>
-                    <button className="top-bar-button-pallet-close-it">X</button>
+                    <button className="top-bar-button-pallet-close-it"
+                    onClick={()=>this.props.onClose(this.props.name)}
+                    >X</button>
             </div>
 
            </div>

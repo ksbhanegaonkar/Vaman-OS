@@ -36,7 +36,8 @@ class Desktop extends Component{
     mouseButtonType:'',
     clickedComponentClass:'',
     
-    desktopItems:{}
+    desktopItems:{},
+    desktopItemViews:{}
 
 
 };
@@ -124,12 +125,15 @@ class Desktop extends Component{
              )
         .then((res)=>res.json())
         .then(data=>{
-          console.log(data['desktop-items']);
-          this.setState({
-            startMenuOption:data['start-menu-list'],
-            contextMenuOption:data['context-menu-list'],
-            desktopItems:data['desktop-items']
-          });
+          console.log(data);
+          this.setState(data);
+
+          //this.setState({
+            // startMenuOption:data['start-menu-list'],
+            // contextMenuOption:data['context-menu-list'],
+            // desktopItems:data['desktop-items'],
+            // desktopItemViews:data['desktop-item-views']
+         // });
           
         });
       }
@@ -192,6 +196,7 @@ class Desktop extends Component{
        for(var item in this.state.desktopItems){
         desktopItemList.push(<DesktopItem type={this.state.desktopItems[item]}
         key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
+        onDoubleClikc={this.onDesktopIconDoubleClick.bind(this)}
         ></DesktopItem>);
         rowNo++;
         if(rowNo >5){
@@ -203,13 +208,26 @@ class Desktop extends Component{
       return desktopItemList;
     }
 
+    onDesktopIconDoubleClick(name){
+      console.log("double clicked on "+name);
+      this.sendDesktopUpdate({state:"update",action:"on-double-click",desktopItem:name});
+
+    }
+
+    onDesktopItemViewClose(name){
+      console.log("double clicked on "+name);
+      this.sendDesktopUpdate({state:"update",action:"on-close",desktopItem:name});
+
+    }
+
     renderDesktopItemView(){
       var desktopItemViewList = [];
-      desktopItemViewList.push(<DesktopItemView></DesktopItemView>);
-      //desktopItems.push(<DesktopItem key="item2" name="My file" type="file"></DesktopItem>);
-      // for(var i=0;i<20;i++){
-      //   desktopItems.push(<DesktopItem></DesktopItem>);
-      // }
+       for(var item in this.state.desktopItemViews){
+        desktopItemViewList.push(<DesktopItemView
+          key={item} name={item} 
+          onClose={this.onDesktopItemViewClose.bind(this)}
+        ></DesktopItemView>);
+       }
       return desktopItemViewList;
     }
 
@@ -225,9 +243,10 @@ class Desktop extends Component{
           </MyContextMenu>
          <TaskBar></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
-          menuItemList={this.state.startMenuOption}>
+          menuItemList={this.state.startMenuOption}> 
          </StartMenu>
          {this.renderDesktopItems()}
+         {this.renderDesktopItemView()}
          
         </div>)
       }
