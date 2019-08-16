@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import $ from 'jquery';
 import './TaskBar.scss';
 import StartMenu from '../StartMenu/StartMenu';
+import TaskBarItem from './TaskBarItem';
 class TaskBar extends Component{
 
     render() {
@@ -10,34 +11,25 @@ class TaskBar extends Component{
           <div className="developer">Kedar Bhanegaonkar</div>
            {this.renderTaskBarItems()}
 
-
         </div>)
       }
 
-    renderTaskBarItems(){
+
+      renderTaskBarItems(){
      
 
-      var taskBarItemsList = [];
-      var clickFun;
-
-
-      for(var item in this.props.taskBarItems){
-
-        if(this.props.taskBarItems[item] == 'none'){
-          clickFun = this.props.onActive;
-        }else{
-          clickFun = this.props.onMinimize;
+        var taskBarItemsList = [];
+  
+        console.log("task bar items");
+        console.log(this.props.taskBarItems);
+        for(var item in this.props.taskBarItems){
+        taskBarItemsList.push(
+          <TaskBarItem key={item} name={item} activeStatus={this.props.taskBarItems[item]}
+          onItemClick={this.props.onItemClick}>
+          </TaskBarItem>);
         }
-
-        taskBarItemsList.push(<button key={item} className={'task-bar-item-'+this.props.taskBarItems[item]}
-        onClick={()=> 
-          clickFun(item)
-        }
-        >{item}</button>);
+       return taskBarItemsList;
       }
-     return taskBarItemsList;
-    }
-
 
 }
 export default TaskBar;

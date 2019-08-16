@@ -81,12 +81,11 @@ class Desktop extends Component{
       });
 
      */
-    this.sendDesktopUpdate({state:"init"});
+    this.initDesktopData();
     }
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
-      console.log(componentClicked);
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
         ||componentClicked === 'task-bar' 
@@ -112,13 +111,13 @@ class Desktop extends Component{
 
 
     
-      sendDesktopUpdate(obj){
+      initDesktopData(){
         
         fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
           {
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
-             body: JSON.stringify(obj), // data can be `string` or {object}!
+             body: JSON.stringify({state:'init'}), // data can be `string` or {object}!
              headers:{
                'Content-Type': 'text/plain'
                ,'Access-Control-Allow-Origin':"*"
@@ -126,16 +125,13 @@ class Desktop extends Component{
              )
         .then((res)=>res.json())
         .then(data=>{
-          console.log(data);
           this.setState(data);
-
           //this.setState({
             // startMenuOption:data['start-menu-list'],
             // contextMenuOption:data['context-menu-list'],
             // desktopItems:data['desktop-items'],
             // desktopItemViews:data['desktop-item-views']
          // });
-          
         });
       }
 
@@ -144,7 +140,6 @@ class Desktop extends Component{
     handleClick(event){
       //event.preventDefault();
         const componentClicked = event.target.className;
-        console.log('class name from left click : '+componentClicked);
         var isStartMenuVisible = false;
         if(componentClicked === 'start-menu-button'){
           isStartMenuVisible=true;
@@ -163,10 +158,6 @@ class Desktop extends Component{
 
     onDragFinish(event) {
       if(event.target.className.includes('desktop-item')){
-        console.log('true');
-        console.log('On mouse finish'+event.target.style);
-        console.log(event.clientX+" and "+event.clientY);
-        
         /*This is used for grid alignment of icons
         event.target.style.left=`${event.clientX-event.clientX%70-25}px`;
         event.target.style.top=`${event.clientY-event.clientY%80-25}px`;*/
@@ -179,11 +170,9 @@ class Desktop extends Component{
     }
     
     mouseUp(event) {
-      console.log('On mouse drag');
     }
 
     onContextMenuOptionClick(event){
-      console.log(event.target);
     }
 
     renderDesktopItems(){
@@ -208,35 +197,76 @@ class Desktop extends Component{
     }
 
     onDesktopIconDoubleClick(name){
-      var newTaskBarItems = this.state.taskBarItems;
-      newTaskBarItems[name] = 'block';
-      this.setState({taskBarItems:newTaskBarItems});
-      console.log(this.state.taskBarItems);
-      console.log("double clicked on "+name);      
-      this.sendDesktopUpdate({state:"update",action:"on-double-click",desktopItem:name});
+
+
+            fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
+            {
+              method: 'POST', 
+              body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
+              headers:{
+                'Content-Type': 'text/plain'
+                ,'Access-Control-Allow-Origin':"*"
+              }}
+              )
+          .then((res)=>res.json())
+          .then(data=>{
+            var newTaskBarItems = this.state.taskBarItems;
+            for(var i in newTaskBarItems){
+              if(newTaskBarItems[i] == 'block'){
+                newTaskBarItems[i]='none';
+              }
+            }
+            newTaskBarItems[data['desktopItem']] = 'block';
+            var newDesktopItemViews = this.state.desktopItemViews;
+            newDesktopItemViews[data['desktopItem']]=data['desktop-item-data'];
+            this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems});         
+          });
     }
 
     onDesktopItemViewClose(name){
-      console.log("double clicked on "+name);
-      this.sendDesktopUpdate({state:"update",action:"on-close",desktopItem:name});
       var newTaskBarItems = this.state.taskBarItems;
+      var newDesktopItemViews = this.state.desktopItemViews;
       delete newTaskBarItems[name];
-      this.setState({taskBarItems:newTaskBarItems});
-      console.log(this.state.taskBarItems);
+      delete newDesktopItemViews[name]
+      this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems});
     }
 
     onDesktopItemViewMinimize(name){
-      console.log("minimize clicked ::: "+name);
       var newTaskBarItems = this.state.taskBarItems;
       newTaskBarItems[name] = 'none';
-      this.setState({taskBarItems:newTaskBarItems});
+      this.setState({taskBarItems:newTaskBarItems});    
     }
 
     onDesktopItemViewActive(name){
-      console.log("minimize clicked ::: "+name);
       var newTaskBarItems = this.state.taskBarItems;
-      newTaskBarItems[name] = 'block';
-      this.setState({taskBarItems:newTaskBarItems});
+        for(var i in newTaskBarItems){
+          if(newTaskBarItems[i] == 'block'){
+            newTaskBarItems[i]='none';
+          }
+        }
+        newTaskBarItems[name] = 'block';
+        this.setState({taskBarItems:newTaskBarItems});  
+    }
+
+    onDesktopItemViewInFocus(name){
+      var newTaskBarItems = this.state.taskBarItems;
+        for(var i in newTaskBarItems){
+          if(newTaskBarItems[i] == 'inFocus'){
+            newTaskBarItems[i]='block';
+          }
+        }
+        newTaskBarItems[name] = 'inFocus';
+        this.setState({taskBarItems:newTaskBarItems});  
+    }
+
+    onTaskBarItemClick(name){
+      // if(this.state.taskBarItems[name]==='block'){
+      //   this.onDesktopItemViewMinimize(name);
+      // }
+      // else {
+        this.onDesktopItemViewActive(name);
+      // }
+
     }
 
     renderDesktopItemView(){
@@ -249,7 +279,6 @@ class Desktop extends Component{
           activeStatus={this.state.taskBarItems[item]}
         ></DesktopItemView>);
        }
-       console.log("test :::::: "+this.state.taskBarItems[item]);
       return desktopItemViewList;
     }
 
@@ -264,8 +293,7 @@ class Desktop extends Component{
               onContextMenuClick={this.onContextMenuOptionClick.bind(this)}>
           </MyContextMenu>
          <TaskBar taskBarItems={this.state.taskBarItems}
-         onActive={this.onDesktopItemViewActive.bind(this)}
-         onMinimize={this.onDesktopItemViewMinimize.bind(this)}
+         onItemClick={this.onTaskBarItemClick.bind(this)}
          ></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}> 

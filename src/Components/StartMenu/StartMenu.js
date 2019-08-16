@@ -19,7 +19,6 @@ class StartMenu extends Component{
 
       openStartMenu(){
        if(this.props.visible){
-        console.log('visible');
 
 
        var contextMenuItems = [];
@@ -34,7 +33,7 @@ class StartMenu extends Component{
        return contextMenuItems;
 
        }else{
-        console.log('not visible');
+
        }
 
       }
