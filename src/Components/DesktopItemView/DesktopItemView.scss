@@ -3,11 +3,14 @@
  .desktop-item-view {
     display:block;
     position: absolute;
-    top: 50px;
-    left: 50px;
-    width: 170px;
-    height: 400px;
-    background: #ebe986;
+    top: 0px;
+    //left: 50px;
+    //width: 1270px;
+    //height: 600px;
+    width: 100%;
+    height: 95%;
+    
+    background: #3f3e3e;
  }
 
  .top-bar{
@@ -16,13 +19,14 @@
     left: 0%;
     width: 100%;
     height: 20px;
-    background: #f11973;
-    font-size: 10px;
+    background: linear-gradient(to bottom, rgb(247, 211, 6), rgb(19, 6, 77));
+    font-size: 18px;
+    color: rgb(16, 223, 27);
  }
 
  .top-bar-button-pallet{
     position: absolute;
-    top: -8px;
+    top: 0px;
     right:0%;
     height: 100%;
  }

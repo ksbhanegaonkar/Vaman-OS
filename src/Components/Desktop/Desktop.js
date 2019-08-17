@@ -8,6 +8,7 @@ import MyContextMenu from '../ContextMenu/MyContextMennu';
 import DesktopItem from '../DesktopItem/DesktopItem';
 import { visitLexicalEnvironment } from 'typescript';
 import DesktopItemView from '../DesktopItemView/DesktopItemView';
+import LoadingScreen from '../LodingScreen/LoadingScreen';
 class Desktop extends Component{
 
   constructor(props){
@@ -39,7 +40,9 @@ class Desktop extends Component{
     desktopItems:{},
     desktopItemViews:{},
 
-    taskBarItems:{}
+    taskBarItems:{},
+
+    dataloding:false
 
 };
 
@@ -112,7 +115,7 @@ class Desktop extends Component{
 
     
       initDesktopData(){
-        
+        this.setState({dataloding:true});
         fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
           {
              method: 'POST', // or 'PUT'
@@ -125,6 +128,7 @@ class Desktop extends Component{
              )
         .then((res)=>res.json())
         .then(data=>{
+          data.dataloding=false;
           this.setState(data);
           //this.setState({
             // startMenuOption:data['start-menu-list'],
@@ -197,7 +201,7 @@ class Desktop extends Component{
     }
 
     onDesktopIconDoubleClick(name){
-
+          this.setState({dataloding:true});
 
             fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
             {
@@ -219,7 +223,7 @@ class Desktop extends Component{
             newTaskBarItems[data['desktopItem']] = 'block';
             var newDesktopItemViews = this.state.desktopItemViews;
             newDesktopItemViews[data['desktopItem']]=data['desktop-item-data'];
-            this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems});         
+            this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
           });
     }
 
@@ -285,7 +289,7 @@ class Desktop extends Component{
     render() {
         return (<div 
         className="desktop-wallpaper">
-
+          <LoadingScreen isLoading={this.state.dataloding}></LoadingScreen>
         <MyContextMenu visible={this.state.contextMenuVisible} 
               xPosition={this.state.mouseXposition}
               yPosition={this.state.mouseYposition} 
