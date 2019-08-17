@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import './DesktopItemView.scss';
+import FolderPlugin from '../DesktopItemViewPlugins/FolderPlugin/FolderPlugin';
 class DesktopItemView extends Component{
 
 
@@ -18,9 +19,9 @@ class DesktopItemView extends Component{
       }
       var style={
         "display":status,
-        "z-index":zIndex
+        "zIndex":zIndex
       };
-        return (<span className={"desktop-item-view"} style={style}>
+        return (<div className={"desktop-item-view"} style={style}>
             { //<div id = {this.props.type} className={"desktop-item-"+this.props.type}></div>
           /* <div id="title" className={"desktop-item-"+this.props.type}>{this.props.name}</div> */}
            <div className="top-bar">
@@ -32,13 +33,26 @@ class DesktopItemView extends Component{
                     onClick={()=>this.props.onClose(this.props.name)}
                     >X</button>
             </div>
-
            </div>
 
-
-        </span>)
+            {this.renderDesktopItemViewPlugin()}
+        </div>)
       }
 
+      renderDesktopItemViewPlugin(){
+        if(this.props.desktopItemViewData['type']==='folder'){
+          return(
+            <div className="desktop-item-view-plugin">
+              <FolderPlugin itemData={this.props.desktopItemViewData}
+              onDoubleClick={this.props.onDoubleClick}
+              ></FolderPlugin>
+            </div>
+          );
+        }else if(this.props.desktopItemViewData['type']==='file'){
+
+        }
+
+      }
 
 }
 export default DesktopItemView;

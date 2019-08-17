@@ -19,9 +19,7 @@ class TaskBar extends Component{
      
 
         var taskBarItemsList = [];
-  
-        console.log("task bar items");
-        console.log(this.props.taskBarItems);
+
         for(var item in this.props.taskBarItems){
         taskBarItemsList.push(
           <TaskBarItem key={item} name={item} activeStatus={this.props.taskBarItems[item]}

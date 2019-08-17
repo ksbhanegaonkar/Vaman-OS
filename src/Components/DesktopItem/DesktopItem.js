@@ -11,7 +11,7 @@ class DesktopItem extends Component{
       };
         return (<span className={"desktop-item"}
           style={style}
-          onDoubleClick={()=>this.props.onDoubleClikc(this.props.name)}
+          onDoubleClick={()=>this.props.onDoubleClick(this.props.name)}
         >
 
         

@@ -188,7 +188,7 @@ class Desktop extends Component{
        for(var item in this.state.desktopItems){
         desktopItemList.push(<DesktopItem type={this.state.desktopItems[item]}
         key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
-        onDoubleClikc={this.onDesktopIconDoubleClick.bind(this)}
+        onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
         ></DesktopItem>);
         rowNo++;
         if(rowNo >5){
@@ -220,9 +220,10 @@ class Desktop extends Component{
                 newTaskBarItems[i]='none';
               }
             }
-            newTaskBarItems[data['desktopItem']] = 'block';
+            var itemName = data['desktop-item-data']['name'];
+            newTaskBarItems[itemName] = 'block';
             var newDesktopItemViews = this.state.desktopItemViews;
-            newDesktopItemViews[data['desktopItem']]=data['desktop-item-data'];
+            newDesktopItemViews[itemName]=data['desktop-item-data'];
             this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
           });
     }
@@ -281,6 +282,8 @@ class Desktop extends Component{
           onClose={this.onDesktopItemViewClose.bind(this)}
           onMinimize={this.onDesktopItemViewMinimize.bind(this)}
           activeStatus={this.state.taskBarItems[item]}
+          onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
+          desktopItemViewData={this.state.desktopItemViews[item]}
         ></DesktopItemView>);
        }
       return desktopItemViewList;
