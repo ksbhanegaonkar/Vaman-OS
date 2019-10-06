@@ -89,12 +89,12 @@ class Desktop extends Component{
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
+      event.preventDefault();
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
         ||componentClicked === 'task-bar' 
         ||componentClicked === 'desktop-item-folder'
         ||componentClicked === 'desktop-item-file'){
-          event.preventDefault();
           const xPosition = event.clientX;
           const yPosition = event.clientY;
           
@@ -116,7 +116,7 @@ class Desktop extends Component{
     
       initDesktopData(){
         this.setState({dataloding:true});
-        fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
+        fetch(new Request("http://localhost:8083/onaction"),
           {
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
@@ -203,7 +203,7 @@ class Desktop extends Component{
     onDesktopIconDoubleClick(name){
           this.setState({dataloding:true});
 
-            fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/onaction"),
+            fetch(new Request("http://localhost:8083/onaction"),
             {
               method: 'POST', 
               body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
