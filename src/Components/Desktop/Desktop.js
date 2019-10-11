@@ -9,8 +9,10 @@ import DesktopItem from '../DesktopItem/DesktopItem';
 import { visitLexicalEnvironment } from 'typescript';
 import DesktopItemView from '../DesktopItemView/DesktopItemView';
 import LoadingScreen from '../LodingScreen/LoadingScreen';
+import { get } from 'https';
+import { delay } from 'q';
 class Desktop extends Component{
-
+  
   constructor(props){
     super(props);
    
@@ -42,7 +44,9 @@ class Desktop extends Component{
 
     taskBarItems:{},
 
-    dataloding:false
+    dataloding:false,
+
+    jwtToken:''
 
 };
 
@@ -112,19 +116,57 @@ class Desktop extends Component{
 
       }
 
+      getAuthenticationToken(){
+        this.setState({dataloding:true});
+        let username = 'kedar';
+        let password = 'kedar';
+        let headers = new Headers();
+        headers.set( 'Content-Type', 'application/json');
+        //headers.set('Access-Control-Allow-Origin',"*");
+        fetch(new Request("http://localhost:8083/authenticate"),
+          {
+            headers:headers,
+             method: 'POST', // or 'PUT'
+             //mode:"no-cors",
+             body: JSON.stringify({username:'kedar',password:'kedar'}) // data can be `string` or {object}!
+   
+          }
+             )
+        .then((res)=>res.json())
+        .then(data=>{
+         
+          console.log('fetched token is ::::: '+data.token);
+          this.setState({jwtToken:data.token})
+          console.log('fetched token is ::::: '+this.state.jwtToken);
+          return data.token;
+          //this.setState({
+            // startMenuOption:data['start-menu-list'],
+            // contextMenuOption:data['context-menu-list'],
+            // desktopItems:data['desktop-items'],
+            // desktopItemViews:data['desktop-item-views']
+         // });
+        });
+      }
 
     
       initDesktopData(){
+        this.getAuthenticationToken();
+        delay(10000);
         this.setState({dataloding:true});
+
+        let hds = new Headers();
+        hds.set('Authorization', 'Bearer '+this.state.jwtToken);
+        hds.set( 'Content-Type', 'text/plain');
+        hds.set('Access-Control-Allow-Origin',"*");
+        console.log('fetched token is ::::: '+this.state.jwtToken);
         fetch(new Request("http://localhost:8083/onaction"),
           {
+            headers:hds,
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
-             body: JSON.stringify({state:'init'}), // data can be `string` or {object}!
-             headers:{
-               'Content-Type': 'text/plain'
-               ,'Access-Control-Allow-Origin':"*"
-             }}
+             body: JSON.stringify({state:'init'}) // data can be `string` or {object}!
+            
+          }
              )
         .then((res)=>res.json())
         .then(data=>{
