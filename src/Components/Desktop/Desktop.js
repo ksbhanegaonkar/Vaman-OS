@@ -46,7 +46,9 @@ class Desktop extends Component{
 
     dataloding:false,
 
-    jwtToken:''
+    jwtToken:'',
+
+    loggedInUserName:''
 
 };
 
@@ -88,7 +90,9 @@ class Desktop extends Component{
       });
 
      */
-    this.initDesktopData();
+    this.getAuthenticationToken();
+    //this.initDesktopData();
+    
     }
 
     handleContextMenu(event){
@@ -117,28 +121,26 @@ class Desktop extends Component{
       }
 
       getAuthenticationToken(){
-        this.setState({dataloding:true});
-        let username = 'kedar';
-        let password = 'kedar';
+        //this.setState({dataloding:true});
         let headers = new Headers();
         headers.set( 'Content-Type', 'application/json');
-        //headers.set('Access-Control-Allow-Origin',"*");
+        headers.set('Access-Control-Allow-Origin',"*");
         fetch(new Request("http://localhost:8083/authenticate"),
           {
             headers:headers,
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
-             body: JSON.stringify({username:'kedar',password:'kedar'}) // data can be `string` or {object}!
+             body: JSON.stringify({username:'admin',password:'admin'}) // data can be `string` or {object}!
    
           }
              )
         .then((res)=>res.json())
         .then(data=>{
          
-          console.log('fetched token is ::::: '+data.token);
-          this.setState({jwtToken:data.token})
-          console.log('fetched token is ::::: '+this.state.jwtToken);
-          return data.token;
+          this.setState({jwtToken:this.jsonEscape('Bearer '+data.token)})
+          console.log('Token is :::: '+this.state.jwtToken);
+          this.initDesktopData();
+
           //this.setState({
             // startMenuOption:data['start-menu-list'],
             // contextMenuOption:data['context-menu-list'],
@@ -148,26 +150,28 @@ class Desktop extends Component{
         });
       }
 
+      jsonEscape(str)  {
+        return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
+    }
     
       initDesktopData(){
-        this.getAuthenticationToken();
-        delay(10000);
+       
         this.setState({dataloding:true});
-
-        let hds = new Headers();
-        hds.set('Authorization', 'Bearer '+this.state.jwtToken);
-        hds.set( 'Content-Type', 'text/plain');
-        hds.set('Access-Control-Allow-Origin',"*");
-        console.log('fetched token is ::::: '+this.state.jwtToken);
+      
         fetch(new Request("http://localhost:8083/onaction"),
           {
-            headers:hds,
+            headers:{
+              'Content-Type': 'text/plain',
+             // ,'Access-Control-Allow-Origin':"*",
+              'Authorization':this.state.jwtToken
+            },
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
              body: JSON.stringify({state:'init'}) // data can be `string` or {object}!
             
           }
              )
+
         .then((res)=>res.json())
         .then(data=>{
           data.dataloding=false;
@@ -250,8 +254,9 @@ class Desktop extends Component{
               method: 'POST', 
               body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
               headers:{
-                'Content-Type': 'text/plain'
-                ,'Access-Control-Allow-Origin':"*"
+                'Content-Type': 'text/plain',
+                //,'Access-Control-Allow-Origin':"*"
+                'Authorization':this.state.jwtToken
               }}
               )
           .then((res)=>res.json())
@@ -345,7 +350,8 @@ class Desktop extends Component{
          onItemClick={this.onTaskBarItemClick.bind(this)}
          ></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
-          menuItemList={this.state.startMenuOption}> 
+          menuItemList={this.state.startMenuOption}
+          loggedUserName={this.state.loggedInUserName}>
          </StartMenu>
          {this.renderDesktopItems()}
          {this.renderDesktopItemView()}
