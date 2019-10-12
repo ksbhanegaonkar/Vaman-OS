@@ -11,6 +11,7 @@ import DesktopItemView from '../DesktopItemView/DesktopItemView';
 import LoadingScreen from '../LodingScreen/LoadingScreen';
 import { get } from 'https';
 import { delay } from 'q';
+import {withRouter} from 'react-router-dom';
 class Desktop extends Component{
   
   constructor(props){
@@ -90,8 +91,8 @@ class Desktop extends Component{
       });
 
      */
-    this.getAuthenticationToken();
-    //this.initDesktopData();
+    //this.getAuthenticationToken();
+    this.initDesktopData();
     
     }
 
@@ -163,7 +164,7 @@ class Desktop extends Component{
             headers:{
               'Content-Type': 'text/plain',
              // ,'Access-Control-Allow-Origin':"*",
-              'Authorization':this.state.jwtToken
+              'Authorization':localStorage.getItem("jwtToken")
             },
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
@@ -182,6 +183,9 @@ class Desktop extends Component{
             // desktopItems:data['desktop-items'],
             // desktopItemViews:data['desktop-item-views']
          // });
+        }).catch(err =>{
+          localStorage.removeItem("jwtToken");
+          this.props.history.push("/");
         });
       }
 
@@ -361,4 +365,4 @@ class Desktop extends Component{
 
 
 }
-export default Desktop;
+export default withRouter(Desktop);

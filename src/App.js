@@ -2,12 +2,20 @@ import React from 'react';
 import './App.css';
 import Desktop from './Components/Desktop/Desktop';
 import LoginForm from './Components/LoginForm/LoginForm';
+import {BrowserRouter as Router,NavLink,Redirect,Route,Switch} from 'react-router-dom';
+import AuthenticatedComponent from './Components/AuthenticatedComponent/AuthenticatedComponent';
 
 function App() {
+  localStorage.removeItem("jwtToken");
   return (
-    <div className="App">
-    <LoginForm></LoginForm>
-    </div>
+    <Router>
+        <Switch>
+          <Route path="/" exact strict component={LoginForm}></Route>
+          <AuthenticatedComponent>
+          <Route path="/desktop" exact strict component={Desktop}></Route>
+          </AuthenticatedComponent>
+        </Switch>
+    </Router>
   );
 }
 
