@@ -130,7 +130,7 @@ class Desktop extends Component{
             headers:headers,
              method: 'POST', // or 'PUT'
              //mode:"no-cors",
-             body: JSON.stringify({username:'admin',password:'admin'}) // data can be `string` or {object}!
+             body: JSON.stringify({username:'kedar',password:'kedar'}) // data can be `string` or {object}!
    
           }
              )
