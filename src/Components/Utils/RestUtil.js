@@ -1,9 +1,9 @@
-export const postRequest =(data,onDataReceive) =>{
+export const postRequest =(action,data,onDataReceive) =>{
     console.log("called from rest utils");
-    fetch(new Request("http://localhost:8083/onaction"),
+    fetch(new Request("http://localhost:8083"+action),
     {
       headers:{
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
        // ,'Access-Control-Allow-Origin':"*",
         'Authorization':localStorage.getItem("jwtToken")
       },
@@ -16,7 +16,6 @@ export const postRequest =(data,onDataReceive) =>{
 
   .then((res)=>res.json())
   .then(data=>{
-    data.dataloding=false;
     onDataReceive(data);
   });
 }

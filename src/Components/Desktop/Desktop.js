@@ -136,7 +136,8 @@ class Desktop extends Component{
       initDesktop(){
        
         this.setState({dataloding:true});
-        postRequest({state:'init'},this.setState.bind(this))
+        postRequest('/onaction',{state:'init'},this.setState.bind(this))
+        this.setState({dataloding:false});
         
         // fetch(new Request("http://localhost:8083/onaction"),
         //   {
@@ -235,7 +236,7 @@ class Desktop extends Component{
 
     onDesktopIconDoubleClick(name){
           this.setState({dataloding:true});
-          postRequest({state:"update",action:"on-double-click",desktopItem:name},
+          postRequest('/onaction',{state:"update",action:"on-double-click",desktopItem:name},
           (data) =>{
             var newTaskBarItems = this.state.taskBarItems;
               for(var i in newTaskBarItems){

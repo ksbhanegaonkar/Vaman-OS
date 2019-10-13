@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import {withRouter} from 'react-router-dom';
 import "./LoginForm.css";
+import {postRequest} from '../Utils/RestUtil';
+
 
 class LoginForm extends Component{
   state={
@@ -29,36 +31,51 @@ class LoginForm extends Component{
       
     event.preventDefault();
 
-    let headers = new Headers();
-    headers.set( 'Content-Type', 'application/json');
-    headers.set('Access-Control-Allow-Origin',"*");
-    fetch(new Request("http://localhost:8083/authenticate"),
-      {
-        headers:headers,
-         method: 'POST', // or 'PUT'
-         //mode:"no-cors",
-         body: JSON.stringify({username:this.state.userName,password:this.state.pass}) // data can be `string` or {object}!
+    postRequest('/authenticate',{username:this.state.userName,password:this.state.pass},
+      (data) =>{
+             if(data.token === undefined){
+                this.setState({errorMsg:'Invalid user credential !!!'});
+                localStorage.removeItem("jwtToken");
+                console.log('user is not valid...');
+                this.props.history.push("/");
+              }else{
+                localStorage.setItem("jwtToken","Bearer "+data.token);
+                console.log('redirecting to destkop');
+                this.props.history.push("/desktop");
+              }
+      }
+      );
 
-      }
-         )
-    .then((res)=>res.json())
-    .then(data=>{ 
-      console.log('Token is :::: '+data.token);
-      if(data.token === undefined){
-        this.setState({errorMsg:'Invalid user credential !!!'});
-        localStorage.removeItem("jwtToken");
-        console.log('user is not valid...');
-        this.props.history.push("/");
-      }else{
-        localStorage.setItem("jwtToken","Bearer "+data.token);
-        console.log('redirecting to destkop');
-        this.props.history.push("/desktop");
-      }
-    }).catch(err =>{
-      localStorage.removeItem("jwtToken");
-      console.log('user is not valid...');
-      this.props.history.push("/");
-    });
+    // let headers = new Headers();
+    // headers.set( 'Content-Type', 'application/json');
+    // headers.set('Access-Control-Allow-Origin',"*");
+    // fetch(new Request("http://localhost:8083/authenticate"),
+    //   {
+    //     headers:headers,
+    //      method: 'POST', // or 'PUT'
+    //      //mode:"no-cors",
+    //      body: JSON.stringify({username:this.state.userName,password:this.state.pass}) // data can be `string` or {object}!
+
+    //   }
+    //      )
+    // .then((res)=>res.json())
+    // .then(data=>{ 
+    //   console.log('Token is :::: '+data.token);
+    //   if(data.token === undefined){
+    //     this.setState({errorMsg:'Invalid user credential !!!'});
+    //     localStorage.removeItem("jwtToken");
+    //     console.log('user is not valid...');
+    //     this.props.history.push("/");
+    //   }else{
+    //     localStorage.setItem("jwtToken","Bearer "+data.token);
+    //     console.log('redirecting to destkop');
+    //     this.props.history.push("/desktop");
+    //   }
+    // }).catch(err =>{
+    //   localStorage.removeItem("jwtToken");
+    //   console.log('user is not valid...');
+    //   this.props.history.push("/");
+    // });
   }
   render(){
     return (
