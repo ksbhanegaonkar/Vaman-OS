@@ -6,12 +6,12 @@ class AuthenticatedComponent extends Component{
     constructor(props){
         super(props);
         this.state={
-            userLoggedIn:false
+            userLoggedIn:true
         }
     }
 
     componentDidMount(){
-        const jwt = getJWT();
+        const jwt = localStorage.getItem("jwtToken");
         if(!jwt){
             this.props.history.push('/');
         }

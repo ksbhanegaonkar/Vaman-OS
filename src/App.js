@@ -1,11 +1,15 @@
-import React from 'react';
+import React,{Component} from 'react';
 import './App.css';
 import Desktop from './Components/Desktop/Desktop';
 import LoginForm from './Components/LoginForm/LoginForm';
 import {BrowserRouter as Router,NavLink,Redirect,Route,Switch} from 'react-router-dom';
 import AuthenticatedComponent from './Components/AuthenticatedComponent/AuthenticatedComponent';
 
-function App() {
+class App extends Component {
+  state={
+    userStatus:false
+  }
+  render(){
   localStorage.removeItem("jwtToken");
   return (
     <Router>
@@ -17,6 +21,9 @@ function App() {
         </Switch>
     </Router>
   );
+  }
+
+
 }
 
 export default App;

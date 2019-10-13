@@ -26,7 +26,7 @@ class StartMenu extends Component{
        for(var i=0;i<this.props.menuItemList.length;i++){
            contextMenuItems.push(<div key={this.props.menuItemList[i]} className="start-Menu-content--option"
            
-           onClick={this.props.onContextMenuClick}
+           onClick={this.props.onStartMenuItemClick}
            
            >{this.props.menuItemList[i]}</div>);
        }

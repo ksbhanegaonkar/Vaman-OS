@@ -227,6 +227,7 @@ class Desktop extends Component{
     }
 
     onContextMenuOptionClick(event){
+      console.log(event.target);
     }
 
     renderDesktopItems(){
@@ -325,6 +326,17 @@ class Desktop extends Component{
 
     }
 
+    onStartMenuItemClick(event){
+      let clickedButton = event.target.childNodes[0].data;
+      console.log(clickedButton);
+      if(clickedButton==='Logout'){
+        console.log('user is logged out...');
+        localStorage.removeItem("jwtToken");
+        this.props.history.push("/");
+        
+      }
+    }
+
     renderDesktopItemView(){
       var desktopItemViewList = [];
        for(var item in this.state.desktopItemViews){
@@ -355,7 +367,8 @@ class Desktop extends Component{
          ></TaskBar>
          <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}
-          loggedUserName={this.state.loggedInUserName}>
+          loggedUserName={this.state.loggedInUserName}
+          onStartMenuItemClick={this.onStartMenuItemClick.bind(this)}>
          </StartMenu>
          {this.renderDesktopItems()}
          {this.renderDesktopItemView()}

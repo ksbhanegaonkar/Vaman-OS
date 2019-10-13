@@ -65,7 +65,7 @@ class LoginForm extends Component{
       <div className="Login">
         <form onSubmit={this.handleSubmit.bind(this)}>
           <FormGroup controlId="email" bsSize="large">
-            <FormLabel>Email</FormLabel>
+            <FormLabel>Username</FormLabel>
             <FormControl
               autoFocus
               type="text"
