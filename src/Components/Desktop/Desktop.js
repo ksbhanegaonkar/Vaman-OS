@@ -61,6 +61,7 @@ class Desktop extends Component{
       //document.addEventListener('drag', this.mouseUp.bind(this));
       //document.addEventListener('scroll', this._handleScroll);
       this.initDesktop();
+      this.loadDesktopItems();
 
     }
 
@@ -99,78 +100,22 @@ class Desktop extends Component{
 
       }
 
-      getAuthenticationToken(){
-        //this.setState({dataloding:true});
-        let headers = new Headers();
-        headers.set( 'Content-Type', 'application/json');
-        headers.set('Access-Control-Allow-Origin',"*");
-        fetch(new Request("http://localhost:8083/authenticate"),
-          {
-            headers:headers,
-             method: 'POST', // or 'PUT'
-             //mode:"no-cors",
-             body: JSON.stringify({username:'kedar',password:'kedar'}) // data can be `string` or {object}!
-   
-          }
-             )
-        .then((res)=>res.json())
-        .then(data=>{
-         
-          this.setState({jwtToken:this.jsonEscape('Bearer '+data.token)})
-          console.log('Token is :::: '+this.state.jwtToken);
-          
 
-          //this.setState({
-            // startMenuOption:data['start-menu-list'],
-            // contextMenuOption:data['context-menu-list'],
-            // desktopItems:data['desktop-items'],
-            // desktopItemViews:data['desktop-item-views']
-         // });
-        });
-      }
 
-      jsonEscape(str)  {
-        return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
-    }
     
-      initDesktop(){
-       
+      initDesktop(){ 
         this.setState({dataloding:true});
         postRequest('/onaction',{state:'init'},this.setState.bind(this))
         this.setState({dataloding:false});
-        
-        // fetch(new Request("http://localhost:8083/onaction"),
-        //   {
-        //     headers:{
-        //       'Content-Type': 'text/plain',
-        //      // ,'Access-Control-Allow-Origin':"*",
-        //       'Authorization':localStorage.getItem("jwtToken")
-        //     },
-        //      method: 'POST', // or 'PUT'
-        //      //mode:"no-cors",
-        //      body: JSON.stringify({state:'init'}) // data can be `string` or {object}!
-            
-        //   }
-        //      )
-
-        // .then((res)=>res.json())
-        // .then(data=>{
-        //   data.dataloding=false;
-        //   this.setState(data);
-        //   //this.setState({
-        //     // startMenuOption:data['start-menu-list'],
-        //     // contextMenuOption:data['context-menu-list'],
-        //     // desktopItems:data['desktop-items'],
-        //     // desktopItemViews:data['desktop-item-views']
-        //  // });
-        // }).catch(err =>{
-        //   localStorage.removeItem("jwtToken");
-        //   this.props.history.push("/");
-        // });
       }
 
       loadDesktopItems(){
-        
+        this.setState({dataloding:true});
+        postRequest('/onaction',{state:"update",action:"on-desktop-item-load"},
+        (data) =>{
+            this.setState({desktopItems:data,dataloding:false});         
+        }
+        );
       }
 
 
@@ -254,34 +199,6 @@ class Desktop extends Component{
               console.log(this.state.desktopItemViews);
           }
           );
-
-          //   fetch(new Request("http://localhost:8083/onaction"),
-          //   {
-          //     method: 'POST', 
-          //     body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
-          //     headers:{
-          //       'Content-Type': 'text/plain',
-          //       //,'Access-Control-Allow-Origin':"*"
-          //       'Authorization':localStorage.getItem("jwtToken")
-          //     }}
-          //     )
-          // .then((res)=>res.json())
-          // .then(data=>{
-          //   var newTaskBarItems = this.state.taskBarItems;
-          //   for(var i in newTaskBarItems){
-          //     if(newTaskBarItems[i] == 'block'){
-          //       newTaskBarItems[i]='none';
-          //     }
-          //   }
-          //   var itemName = data['desktop-item-data'].name;
-          //   console.log("Desktop item data "+data);
-          //   console.log("item name is :::"+itemName);
-          //   newTaskBarItems[itemName] = 'block';
-          //   var newDesktopItemViews = this.state.desktopItemViews;
-          //   newDesktopItemViews[itemName]=data['desktop-item-data'];
-          //   this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
-          //   console.log(this.state.desktopItemViews);
-          // });
     }
 
     onDesktopItemViewClose(name){
