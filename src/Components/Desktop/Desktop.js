@@ -12,6 +12,7 @@ import LoadingScreen from '../LodingScreen/LoadingScreen';
 import { get } from 'https';
 import { delay } from 'q';
 import {withRouter} from 'react-router-dom';
+import {postRequest} from '../Utils/RestUtil';
 class Desktop extends Component{
   
   constructor(props){
@@ -71,30 +72,7 @@ class Desktop extends Component{
     //document.removeEventListener('scroll', this._handleScroll);
     }
 
-    initDesktop(){
- /*     var newState = this.state;
-      var menuOptions;
-      fetch(new Request("http://localhost:8080/Vaman-OS-backend/webapi/services/getContextMenuList"))
-      .then((res)=>res.json())
-      .then(data=>{
 
-        menuOptions =
-        {
-          "desktop-wallpaper":data['desktop-wallpaper'],
-          "start-menu-button":data['start-button-context-menu'],
-          "task-bar":data['task-bar'],
-          "desktop-item-folder":data['desktop-item-folder'],
-          "desktop-item-file":data['desktop-item-file']
-        };
-        this.setState({contextMenuOption:menuOptions});
-        
-      });
-
-     */
-    //this.getAuthenticationToken();
-    this.initDesktopData();
-    
-    }
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
@@ -140,7 +118,7 @@ class Desktop extends Component{
          
           this.setState({jwtToken:this.jsonEscape('Bearer '+data.token)})
           console.log('Token is :::: '+this.state.jwtToken);
-          this.initDesktopData();
+          
 
           //this.setState({
             // startMenuOption:data['start-menu-list'],
@@ -155,40 +133,44 @@ class Desktop extends Component{
         return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t");
     }
     
-      initDesktopData(){
+      initDesktop(){
        
         this.setState({dataloding:true});
-      
-        fetch(new Request("http://localhost:8083/onaction"),
-          {
-            headers:{
-              'Content-Type': 'text/plain',
-             // ,'Access-Control-Allow-Origin':"*",
-              'Authorization':localStorage.getItem("jwtToken")
-            },
-             method: 'POST', // or 'PUT'
-             //mode:"no-cors",
-             body: JSON.stringify({state:'init'}) // data can be `string` or {object}!
+        postRequest({state:'init'},this.setState.bind(this))
+        
+        // fetch(new Request("http://localhost:8083/onaction"),
+        //   {
+        //     headers:{
+        //       'Content-Type': 'text/plain',
+        //      // ,'Access-Control-Allow-Origin':"*",
+        //       'Authorization':localStorage.getItem("jwtToken")
+        //     },
+        //      method: 'POST', // or 'PUT'
+        //      //mode:"no-cors",
+        //      body: JSON.stringify({state:'init'}) // data can be `string` or {object}!
             
-          }
-             )
+        //   }
+        //      )
 
-        .then((res)=>res.json())
-        .then(data=>{
-          data.dataloding=false;
-          this.setState(data);
-          //this.setState({
-            // startMenuOption:data['start-menu-list'],
-            // contextMenuOption:data['context-menu-list'],
-            // desktopItems:data['desktop-items'],
-            // desktopItemViews:data['desktop-item-views']
-         // });
-        }).catch(err =>{
-          localStorage.removeItem("jwtToken");
-          this.props.history.push("/");
-        });
+        // .then((res)=>res.json())
+        // .then(data=>{
+        //   data.dataloding=false;
+        //   this.setState(data);
+        //   //this.setState({
+        //     // startMenuOption:data['start-menu-list'],
+        //     // contextMenuOption:data['context-menu-list'],
+        //     // desktopItems:data['desktop-items'],
+        //     // desktopItemViews:data['desktop-item-views']
+        //  // });
+        // }).catch(err =>{
+        //   localStorage.removeItem("jwtToken");
+        //   this.props.history.push("/");
+        // });
       }
 
+      loadDesktopItems(){
+        
+      }
 
 
     handleClick(event){
@@ -253,31 +235,52 @@ class Desktop extends Component{
 
     onDesktopIconDoubleClick(name){
           this.setState({dataloding:true});
-
-            fetch(new Request("http://localhost:8083/onaction"),
-            {
-              method: 'POST', 
-              body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
-              headers:{
-                'Content-Type': 'text/plain',
-                //,'Access-Control-Allow-Origin':"*"
-                'Authorization':localStorage.getItem("jwtToken")
-              }}
-              )
-          .then((res)=>res.json())
-          .then(data=>{
+          postRequest({state:"update",action:"on-double-click",desktopItem:name},
+          (data) =>{
             var newTaskBarItems = this.state.taskBarItems;
-            for(var i in newTaskBarItems){
-              if(newTaskBarItems[i] == 'block'){
-                newTaskBarItems[i]='none';
+              for(var i in newTaskBarItems){
+                if(newTaskBarItems[i] == 'block'){
+                  newTaskBarItems[i]='none';
+                }
               }
-            }
-            var itemName = data['desktop-item-data']['name'];
-            newTaskBarItems[itemName] = 'block';
-            var newDesktopItemViews = this.state.desktopItemViews;
-            newDesktopItemViews[itemName]=data['desktop-item-data'];
-            this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
-          });
+              var itemName = data['desktop-item-data'].name;
+              console.log("Desktop item data "+data);
+              console.log("item name is :::"+itemName);
+              newTaskBarItems[itemName] = 'block';
+              var newDesktopItemViews = this.state.desktopItemViews;
+              newDesktopItemViews[itemName]=data['desktop-item-data'];
+              this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
+              console.log(this.state.desktopItemViews);
+          }
+          );
+
+          //   fetch(new Request("http://localhost:8083/onaction"),
+          //   {
+          //     method: 'POST', 
+          //     body: JSON.stringify({state:"update",action:"on-double-click",desktopItem:name}), 
+          //     headers:{
+          //       'Content-Type': 'text/plain',
+          //       //,'Access-Control-Allow-Origin':"*"
+          //       'Authorization':localStorage.getItem("jwtToken")
+          //     }}
+          //     )
+          // .then((res)=>res.json())
+          // .then(data=>{
+          //   var newTaskBarItems = this.state.taskBarItems;
+          //   for(var i in newTaskBarItems){
+          //     if(newTaskBarItems[i] == 'block'){
+          //       newTaskBarItems[i]='none';
+          //     }
+          //   }
+          //   var itemName = data['desktop-item-data'].name;
+          //   console.log("Desktop item data "+data);
+          //   console.log("item name is :::"+itemName);
+          //   newTaskBarItems[itemName] = 'block';
+          //   var newDesktopItemViews = this.state.desktopItemViews;
+          //   newDesktopItemViews[itemName]=data['desktop-item-data'];
+          //   this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
+          //   console.log(this.state.desktopItemViews);
+          // });
     }
 
     onDesktopItemViewClose(name){
