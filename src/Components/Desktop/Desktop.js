@@ -41,6 +41,8 @@ class Desktop extends Component{
     mouseButtonType:'',
     clickedComponentClass:'',
     
+    iconsList:{},
+
     desktopItems:{},
     desktopItemViews:{},
 
@@ -61,6 +63,7 @@ class Desktop extends Component{
       //document.addEventListener('drag', this.mouseUp.bind(this));
       //document.addEventListener('scroll', this._handleScroll);
       this.initDesktop();
+     // this.loadDesktopIcons();
       this.loadDesktopItems();
 
     }
@@ -105,10 +108,20 @@ class Desktop extends Component{
     
       initDesktop(){ 
         this.setState({dataloding:true});
-        postRequest('/onaction',{state:'init'},this.setState.bind(this))
+        postRequest('/onaction',{state:'init'},
+        (data) =>{
+          this.setState(data);
+        });
         this.setState({dataloding:false});
       }
 
+      // loadDesktopIcons(){
+      //   this.setState({dataloding:true});
+      //   postRequest('/onaction',{state:"update",action:"on-desktop-icons-load"},
+      //   (data) =>{
+      //     this.setState({iconsList:data});
+      //   });
+      // }
       loadDesktopItems(){
         this.setState({dataloding:true});
         postRequest('/onaction',{state:"update",action:"on-desktop-item-load"},
@@ -165,7 +178,10 @@ class Desktop extends Component{
       var horizontalGridSize=90;
       var vertialGridSize=100;
        for(var item in this.state.desktopItems){
-        desktopItemList.push(<DesktopItem type={this.state.desktopItems[item]}
+         let type = this.state.desktopItems[item];
+         console.log("Type is ::"+type);
+        desktopItemList.push(<DesktopItem type={type}
+        icon={this.state.iconsList[type]}  
         key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
         onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
         ></DesktopItem>);
