@@ -4,9 +4,14 @@ import {withRouter} from 'react-router-dom';
 import "./LoginForm.css";
 
 class LoginForm extends Component{
-  stete={
+  state={
     userName:'',
-    pass:''
+    pass:'',
+    errorMsg:''
+  }
+  constructor(props){
+    super(props);
+    
   }
 
   validateForm() {
@@ -37,21 +42,21 @@ class LoginForm extends Component{
       }
          )
     .then((res)=>res.json())
-    .then(data=>{
-     
-      
+    .then(data=>{ 
       console.log('Token is :::: '+data.token);
-      localStorage.setItem("jwtToken","Bearer "+data.token);
-      this.props.history.push("/desktop");
-
-      //this.setState({
-        // startMenuOption:data['start-menu-list'],
-        // contextMenuOption:data['context-menu-list'],
-        // desktopItems:data['desktop-items'],
-        // desktopItemViews:data['desktop-item-views']
-     // });
+      if(data.token === undefined){
+        this.setState({errorMsg:'Invalid user credential !!!'});
+        localStorage.removeItem("jwtToken");
+        console.log('user is not valid...');
+        this.props.history.push("/");
+      }else{
+        localStorage.setItem("jwtToken","Bearer "+data.token);
+        console.log('redirecting to destkop');
+        this.props.history.push("/desktop");
+      }
     }).catch(err =>{
       localStorage.removeItem("jwtToken");
+      console.log('user is not valid...');
       this.props.history.push("/");
     });
   }
@@ -81,7 +86,12 @@ class LoginForm extends Component{
           type="submit">
             Login
           </Button>
+          <div className='error-message'>
+          <spam>{this.state.errorMsg}</spam>
+          </div>
+
         </form>
+
       </div>
     );
   }

@@ -260,7 +260,7 @@ class Desktop extends Component{
               headers:{
                 'Content-Type': 'text/plain',
                 //,'Access-Control-Allow-Origin':"*"
-                'Authorization':this.state.jwtToken
+                'Authorization':localStorage.getItem("jwtToken")
               }}
               )
           .then((res)=>res.json())
