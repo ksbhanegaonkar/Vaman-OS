@@ -180,7 +180,7 @@ class Desktop extends Component{
        for(var item in this.state.desktopItems){
          let type = this.state.desktopItems[item];
          console.log("Type is ::"+type);
-        desktopItemList.push(<DesktopItem type={type}
+        desktopItemList.push(<DesktopItem
         icon={this.state.iconsList[type]}  
         key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
         onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}

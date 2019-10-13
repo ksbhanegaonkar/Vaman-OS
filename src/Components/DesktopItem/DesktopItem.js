@@ -19,7 +19,7 @@ class DesktopItem extends Component{
 
           <img id="icon-image" title="test" src={this.props.icon}
           />
-          <div id="title" className={"desktop-item-"+this.props.type}>{this.props.name}</div> 
+          <div id="title">{this.props.name}</div> 
 
         </div>)
       }
