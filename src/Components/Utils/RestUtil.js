@@ -1,5 +1,4 @@
 export const postRequest =(action,data,onDataReceive) =>{
-    console.log("called from rest utils");
     fetch(new Request("http://localhost:8083"+action),
     {
       headers:{
@@ -18,4 +17,20 @@ export const postRequest =(action,data,onDataReceive) =>{
   .then(data=>{
     onDataReceive(data);
   });
+}
+
+export const getRequest =(action,onDataReceive) =>{
+  fetch(new Request("http://localhost:8083"+action),
+  {
+    headers:{
+      'Authorization':localStorage.getItem("jwtToken")
+    },
+     method: 'GET', // or 'PUT'    
+  }
+     )
+
+.then((res)=>res.json())
+.then(data=>{
+  onDataReceive(data);
+});
 }

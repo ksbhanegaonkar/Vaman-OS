@@ -6,7 +6,6 @@ class DesktopItem extends Component{
 
     render() {
 
-      console.log("icon is :::"+this.props.icon);
 
       var style={
         top:this.props.top,

@@ -73,6 +73,7 @@ class LoginForm extends Component{
     //   }
     // }).catch(err =>{
     //   localStorage.removeItem("jwtToken");
+
     //   console.log('user is not valid...');
     //   this.props.history.push("/");
     // });
@@ -81,7 +82,7 @@ class LoginForm extends Component{
     return (
       <div className="Login">
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <FormGroup controlId="email" bsSize="large">
+          <FormGroup controlId="email" >
             <FormLabel>Username</FormLabel>
             <FormControl
               autoFocus
@@ -90,7 +91,7 @@ class LoginForm extends Component{
               onChange={e => this.setUsername(e.target.value)}
             />
           </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
+          <FormGroup controlId="password" >
             <FormLabel>Password</FormLabel>
             <FormControl
               //value={this.state.pass?this.state.pass:''}
@@ -98,13 +99,13 @@ class LoginForm extends Component{
               type="password"
             />
           </FormGroup>
-          <Button block bsSize="large" 
+          <Button block 
           //disabled={!this.validateForm()} 
           type="submit">
             Login
           </Button>
           <div className='error-message'>
-          <spam>{this.state.errorMsg}</spam>
+          <span>{this.state.errorMsg}</span>
           </div>
 
         </form>

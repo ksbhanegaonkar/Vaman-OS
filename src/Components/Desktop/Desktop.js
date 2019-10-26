@@ -12,7 +12,7 @@ import LoadingScreen from '../LodingScreen/LoadingScreen';
 import { get } from 'https';
 import { delay } from 'q';
 import {withRouter} from 'react-router-dom';
-import {postRequest} from '../Utils/RestUtil';
+import {postRequest,getRequest} from '../Utils/RestUtil';
 class Desktop extends Component{
   
   constructor(props){
@@ -43,7 +43,7 @@ class Desktop extends Component{
     
     iconsList:{},
 
-    desktopItems:{},
+    desktopItems:[],
     desktopItemViews:{},
 
     taskBarItems:{},
@@ -124,7 +124,7 @@ class Desktop extends Component{
       // }
       loadDesktopItems(){
         this.setState({dataloding:true});
-        postRequest('/onaction',{state:"update",action:"on-desktop-item-load"},
+        getRequest('/getdesktopitems',
         (data) =>{
             this.setState({desktopItems:data,dataloding:false});         
         }
@@ -169,20 +169,41 @@ class Desktop extends Component{
 
     onContextMenuOptionClick(event){
       console.log(event.target);
+      
     }
 
     renderDesktopItems(){
-      var desktopItemList = [];
-      var rowNo =1;
-      var columnNo =1;
-      var horizontalGridSize=90;
-      var vertialGridSize=100;
-       for(var item in this.state.desktopItems){
-         let type = this.state.desktopItems[item];
-         console.log("Type is ::"+type);
+      //var desktopItemList = [];
+      // var rowNo =1;
+      // var columnNo =1;
+      // var horizontalGridSize=90;
+      // var vertialGridSize=100;
+      //  for(var item in this.state.desktopItems){
+      //    let type = this.state.desktopItems[item];
+      //    console.log("Type is ::"+type);
+      //   desktopItemList.push(<DesktopItem
+      //   icon={this.state.iconsList[type]}  
+      //   key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
+      //   onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
+      //   ></DesktopItem>);
+      //   rowNo++;
+      //   if(rowNo >5){
+      //     rowNo=1;
+      //     columnNo++;
+      //   }
+        
+      //  }
+      let desktopItemList = [];
+      let rowNo =1;
+      let columnNo =1;
+      let horizontalGridSize=90;
+      let vertialGridSize=100;
+       for(let i=0;i<this.state.desktopItems.length;i++){
+         let item = this.state.desktopItems[i];
+         let type = item.appType;
         desktopItemList.push(<DesktopItem
         icon={this.state.iconsList[type]}  
-        key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
+        key={item.appId} name={item.appName} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
         onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
         ></DesktopItem>);
         rowNo++;
@@ -192,7 +213,9 @@ class Desktop extends Component{
         }
         
        }
-      return desktopItemList;
+
+       return desktopItemList;
+
     }
 
     onDesktopIconDoubleClick(name){
@@ -206,13 +229,10 @@ class Desktop extends Component{
                 }
               }
               var itemName = data['desktop-item-data'].name;
-              console.log("Desktop item data "+data);
-              console.log("item name is :::"+itemName);
               newTaskBarItems[itemName] = 'block';
               var newDesktopItemViews = this.state.desktopItemViews;
               newDesktopItemViews[itemName]=data['desktop-item-data'];
               this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
-              console.log(this.state.desktopItemViews);
           }
           );
     }
@@ -265,9 +285,7 @@ class Desktop extends Component{
 
     onStartMenuItemClick(event){
       let clickedButton = event.target.childNodes[0].data;
-      console.log(clickedButton);
       if(clickedButton==='Logout'){
-        console.log('user is logged out...');
         localStorage.removeItem("jwtToken");
         this.props.history.push("/");
         
