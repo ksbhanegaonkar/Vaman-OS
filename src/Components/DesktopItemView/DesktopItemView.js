@@ -1,8 +1,17 @@
 import React,{Component} from 'react';
 import './DesktopItemView.scss';
 import FolderPlugin from '../DesktopItemViewPlugins/FolderPlugin/FolderPlugin';
+import FilePlugin from '../DesktopItemViewPlugins/FilePlugin/FilePlugin';
+import {getRequest,postRequest} from '../Utils/RestUtil';
 class DesktopItemView extends Component{
 
+    state={
+      payload:""
+    };
+
+    componentDidMount(){
+      this.getPayload(this.props.item.appId);
+    }
 
     render() {
       var status;
@@ -42,16 +51,38 @@ class DesktopItemView extends Component{
       renderDesktopItemViewPlugin(){
         if(this.props.item.appType==='folder'){
           return(
-            <div className="desktop-item-view-plugin">
+            <div>
               <FolderPlugin item={this.props.item}
               onDoubleClick={this.props.onDoubleClick}
+              getPayload={this.getPayload.bind(this)}
+              updatePayload={this.updatePayload.bind(this)}
               ></FolderPlugin>
             </div>
           );
         }else if(this.props.item.appType==='file'){
-
+            return(<div>
+              <FilePlugin item={this.props.item}
+               etPayload={this.getPayload.bind(this)}
+              updatePayload={this.updatePayload.bind(this)}
+              ></FilePlugin>
+            </div>
+            );
         }
 
+      }
+
+      getPayload(appId){
+        getRequest('/getapppayload/'+appId,(data)=>{
+          this.setState({payload:data.payload});
+        });
+      }
+
+      updatePayload(appId,payload){
+          postRequest('/updateapppayload',{"appId":appId,"payload":payload},
+          (data)=>{
+            this.setState({payload:data.payload});
+          }
+          )
       }
 
 }
