@@ -5,9 +5,10 @@ class FolderPlugin extends Component{
 
     render() {
 
-        return (<div>
-            {this.renderFolderItems()}
-        </div>);
+        // return (<div>
+        //     {this.renderFolderItems()}
+        // </div>);
+        return <div></div>
       }
 
       renderFolderItems(){

@@ -13,12 +13,12 @@ class DesktopItem extends Component{
       };
         return (<div className={"desktop-item"}
           style={style}
-          onDoubleClick={()=>this.props.onDoubleClick(this.props.name)}
+          onDoubleClick={()=>this.props.onDoubleClick(this.props.item)}
         >
 
           <img id="icon-image" title="test" src={this.props.icon}
           />
-          <div id="title">{this.props.name}</div> 
+          <div id="title">{this.props.item.appName}</div> 
 
         </div>)
       }

@@ -25,12 +25,12 @@ class DesktopItemView extends Component{
             { //<div id = {this.props.type} className={"desktop-item-"+this.props.type}></div>
           /* <div id="title" className={"desktop-item-"+this.props.type}>{this.props.name}</div> */}
            <div className="top-bar">
-           {this.props.name}
+           {this.props.item.appName}
            <div className="top-bar-button-pallet">
                     <button className="minimize-it"
-                    onClick={()=>this.props.onMinimize(this.props.name)}>-</button>
+                    onClick={()=>this.props.onMinimize(this.props.item.appId)}>-</button>
                     <button className="top-bar-button-pallet-close-it"
-                    onClick={()=>this.props.onClose(this.props.name)}
+                    onClick={()=>this.props.onClose(this.props.item.appId)}
                     >X</button>
             </div>
            </div>
@@ -40,15 +40,15 @@ class DesktopItemView extends Component{
       }
 
       renderDesktopItemViewPlugin(){
-        if(this.props.desktopItemViewData['type']==='folder'){
+        if(this.props.item.appType==='folder'){
           return(
             <div className="desktop-item-view-plugin">
-              <FolderPlugin itemData={this.props.desktopItemViewData}
+              <FolderPlugin item={this.props.item}
               onDoubleClick={this.props.onDoubleClick}
               ></FolderPlugin>
             </div>
           );
-        }else if(this.props.desktopItemViewData['type']==='file'){
+        }else if(this.props.item.appType==='file'){
 
         }
 

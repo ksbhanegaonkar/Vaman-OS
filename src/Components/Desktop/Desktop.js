@@ -13,6 +13,7 @@ import { get } from 'https';
 import { delay } from 'q';
 import {withRouter} from 'react-router-dom';
 import {postRequest,getRequest} from '../Utils/RestUtil';
+import { conditionalExpression } from '@babel/types';
 class Desktop extends Component{
   
   constructor(props){
@@ -169,30 +170,10 @@ class Desktop extends Component{
 
     onContextMenuOptionClick(event){
       console.log(event.target);
-      
+
     }
 
     renderDesktopItems(){
-      //var desktopItemList = [];
-      // var rowNo =1;
-      // var columnNo =1;
-      // var horizontalGridSize=90;
-      // var vertialGridSize=100;
-      //  for(var item in this.state.desktopItems){
-      //    let type = this.state.desktopItems[item];
-      //    console.log("Type is ::"+type);
-      //   desktopItemList.push(<DesktopItem
-      //   icon={this.state.iconsList[type]}  
-      //   key={item} name={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
-      //   onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
-      //   ></DesktopItem>);
-      //   rowNo++;
-      //   if(rowNo >5){
-      //     rowNo=1;
-      //     columnNo++;
-      //   }
-        
-      //  }
       let desktopItemList = [];
       let rowNo =1;
       let columnNo =1;
@@ -203,7 +184,7 @@ class Desktop extends Component{
          let type = item.appType;
         desktopItemList.push(<DesktopItem
         icon={this.state.iconsList[type]}  
-        key={item.appId} name={item.appName} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
+        key={item.appId} item={item} top={rowNo*vertialGridSize+'px'} left={columnNo*horizontalGridSize+'px'}
         onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
         ></DesktopItem>);
         rowNo++;
@@ -218,47 +199,60 @@ class Desktop extends Component{
 
     }
 
-    onDesktopIconDoubleClick(name){
-          this.setState({dataloding:true});
-          postRequest('/onaction',{state:"update",action:"on-double-click",desktopItem:name},
-          (data) =>{
+    onDesktopIconDoubleClick(item){
+           this.setState({dataloding:true});
+          // console.log("name is ::::"+name);
+          // postRequest('/onaction',{state:"update",action:"on-double-click",desktopItem:name},
+          // (data) =>{
+          //   var newTaskBarItems = this.state.taskBarItems;
+          //     for(var i in newTaskBarItems){
+          //       if(newTaskBarItems[i] == 'block'){
+          //         newTaskBarItems[i]='none';
+          //       }
+          //     }
+          //     var itemName = data['desktop-item-data'].name;
+          //     newTaskBarItems[itemName] = 'block';
+          //     var newDesktopItemViews = this.state.desktopItemViews;
+          //     newDesktopItemViews[itemName]=data['desktop-item-data'];
+          //     this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
+          // }
+          // );
+          if(this.state.taskBarItems[item.appId]===undefined){
             var newTaskBarItems = this.state.taskBarItems;
-              for(var i in newTaskBarItems){
-                if(newTaskBarItems[i] == 'block'){
-                  newTaskBarItems[i]='none';
-                }
-              }
-              var itemName = data['desktop-item-data'].name;
-              newTaskBarItems[itemName] = 'block';
-              var newDesktopItemViews = this.state.desktopItemViews;
-              newDesktopItemViews[itemName]=data['desktop-item-data'];
-              this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});         
+            newTaskBarItems[item.appId] = 'block';
+            var newDesktopItemViews = this.state.desktopItemViews;
+            newDesktopItemViews[item.appId] = item;
+            this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems,dataloding:false});
+          }else{
+            var newTaskBarItems = this.state.taskBarItems;
+            newTaskBarItems[item.appId] = 'block';
+            this.setState({taskBarItems:newTaskBarItems,dataloding:false});
           }
-          );
+
     }
 
-    onDesktopItemViewClose(name){
+    onDesktopItemViewClose(appId){
       var newTaskBarItems = this.state.taskBarItems;
       var newDesktopItemViews = this.state.desktopItemViews;
-      delete newTaskBarItems[name];
-      delete newDesktopItemViews[name]
+      delete newTaskBarItems[appId];
+      delete newDesktopItemViews[appId]
       this.setState({desktopItemViews:newDesktopItemViews,taskBarItems:newTaskBarItems});
     }
 
-    onDesktopItemViewMinimize(name){
+    onDesktopItemViewMinimize(appId){
       var newTaskBarItems = this.state.taskBarItems;
-      newTaskBarItems[name] = 'none';
+      newTaskBarItems[appId] = 'none';
       this.setState({taskBarItems:newTaskBarItems});    
     }
 
-    onDesktopItemViewActive(name){
+    onDesktopItemViewActive(appId){
       var newTaskBarItems = this.state.taskBarItems;
         for(var i in newTaskBarItems){
           if(newTaskBarItems[i] == 'block'){
             newTaskBarItems[i]='none';
           }
         }
-        newTaskBarItems[name] = 'block';
+        newTaskBarItems[appId] = 'block';
         this.setState({taskBarItems:newTaskBarItems});  
     }
 
@@ -273,13 +267,14 @@ class Desktop extends Component{
         this.setState({taskBarItems:newTaskBarItems});  
     }
 
-    onTaskBarItemClick(name){
-      // if(this.state.taskBarItems[name]==='block'){
-      //   this.onDesktopItemViewMinimize(name);
-      // }
-      // else {
-        this.onDesktopItemViewActive(name);
-      // }
+    onTaskBarItemClick(appId){
+      
+      if(this.state.taskBarItems[appId]==='block'){
+        this.onDesktopItemViewMinimize(appId);
+      }
+      else {
+        this.onDesktopItemViewActive(appId);
+      }
 
     }
 
@@ -294,16 +289,27 @@ class Desktop extends Component{
 
     renderDesktopItemView(){
       var desktopItemViewList = [];
-       for(var item in this.state.desktopItemViews){
-        desktopItemViewList.push(<DesktopItemView
-          key={item} name={item} 
+      //  for(var item in this.state.desktopItemViews){
+      //   desktopItemViewList.push(<DesktopItemView
+      //     key={item} name={item} 
+      //     onClose={this.onDesktopItemViewClose.bind(this)}
+      //     onMinimize={this.onDesktopItemViewMinimize.bind(this)}
+      //     activeStatus={this.state.taskBarItems[item]}
+      //     onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
+      //     desktopItemViewData={this.state.desktopItemViews[item]}
+      //   ></DesktopItemView>);
+      //  }
+        for(let appId in this.state.desktopItemViews){
+         let item = this.state.desktopItemViews[appId];
+          desktopItemViewList.push(<DesktopItemView
+          key={item.appId} item={item} 
           onClose={this.onDesktopItemViewClose.bind(this)}
           onMinimize={this.onDesktopItemViewMinimize.bind(this)}
-          activeStatus={this.state.taskBarItems[item]}
+          activeStatus={this.state.taskBarItems[item.appId]}
           onDoubleClick={this.onDesktopIconDoubleClick.bind(this)}
-          desktopItemViewData={this.state.desktopItemViews[item]}
         ></DesktopItemView>);
        }
+
       return desktopItemViewList;
     }
 
@@ -318,13 +324,14 @@ class Desktop extends Component{
               onContextMenuClick={this.onContextMenuOptionClick.bind(this)}>
           </MyContextMenu>
          <TaskBar taskBarItems={this.state.taskBarItems}
+         desktopItemViews={this.state.desktopItemViews}
          onItemClick={this.onTaskBarItemClick.bind(this)}
          ></TaskBar>
-         <StartMenu visible={this.state.startMenuVisible}
+         {/* <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}
           loggedUserName={this.state.loggedInUserName}
           onStartMenuItemClick={this.onStartMenuItemClick.bind(this)}>
-         </StartMenu>
+         </StartMenu> */}
          {this.renderDesktopItems()}
          {this.renderDesktopItemView()}
          
