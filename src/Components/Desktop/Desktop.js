@@ -81,6 +81,7 @@ class Desktop extends Component{
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
+      console.log("Component right clicked :::"+componentClicked);
       event.preventDefault();
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 

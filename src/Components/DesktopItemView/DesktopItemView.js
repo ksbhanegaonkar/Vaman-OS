@@ -62,7 +62,7 @@ class DesktopItemView extends Component{
         }else if(this.props.item.appType==='file'){
             return(<div>
               <FilePlugin item={this.props.item}
-               etPayload={this.getPayload.bind(this)}
+              getPayload={this.getPayload.bind(this)}
               updatePayload={this.updatePayload.bind(this)}
               ></FilePlugin>
             </div>
