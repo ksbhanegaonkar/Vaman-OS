@@ -327,11 +327,11 @@ class Desktop extends Component{
          desktopItemViews={this.state.desktopItemViews}
          onItemClick={this.onTaskBarItemClick.bind(this)}
          ></TaskBar>
-         {/* <StartMenu visible={this.state.startMenuVisible}
+          <StartMenu visible={this.state.startMenuVisible}
           menuItemList={this.state.startMenuOption}
           loggedUserName={this.state.loggedInUserName}
           onStartMenuItemClick={this.onStartMenuItemClick.bind(this)}>
-         </StartMenu> */}
+         </StartMenu> 
          {this.renderDesktopItems()}
          {this.renderDesktopItemView()}
          
