@@ -24,8 +24,8 @@ class Desktop extends Component{
       "desktop-wallpaper":['New Sprint','New User Story','Refresh','Copy','Cut','Paste'],
       "start-menu-button":['Option 1','Option 2','Option 3','Option 4'],
       "task-bar":['Option 5','Option 6','Option 7','Option 8'],
-      "desktop-item-folder":['Open folder','Open folder in new window','Bookmark folder','Copy Folder','Rename Folder','Delete Folder'],
-      "desktop-item-file":['Open file','Open file in new window','Bookmark file','Copy file','Rename File','Delete file']
+      "folder":['Open folder','Open folder in new window','Bookmark folder','Copy Folder','Rename Folder','Delete Folder'],
+      "file":['Open file','Open file in new window','Bookmark file','Copy file','Rename File','Delete file']
     };
     this.state.startMenuOption =['My Folder','My Bookmarks','My Notes','Logout'];
     
@@ -81,15 +81,14 @@ class Desktop extends Component{
 
     handleContextMenu(event){
       const componentClicked = event.target.className;
+      const xPosition = event.clientX;
+      const yPosition = event.clientY;
       console.log("Component right clicked :::"+componentClicked);
       event.preventDefault();
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
-        ||componentClicked === 'task-bar' 
-        ||componentClicked === 'desktop-item-folder'
-        ||componentClicked === 'desktop-item-file'){
-          const xPosition = event.clientX;
-          const yPosition = event.clientY;
+        ||componentClicked === 'task-bar'){
+
           
           this.setState(
               { mouseXposition:xPosition,
@@ -101,6 +100,26 @@ class Desktop extends Component{
               });
 
              // this.sendDesktopUpdate(event.target.innerText);
+        }
+        else if(componentClicked.includes("app/file")){
+          this.setState(
+            { mouseXposition:xPosition,
+              mouseYposition:yPosition,
+              clickedComponentClass:"file",
+              mouseButtonType:'right-click',
+              contextMenuVisible:true,
+              startMenuVisible:false
+            });
+        }
+        else if(componentClicked.includes("app/folder")){
+          this.setState(
+            { mouseXposition:xPosition,
+              mouseYposition:yPosition,
+              clickedComponentClass:"folder",
+              mouseButtonType:'right-click',
+              contextMenuVisible:true,
+              startMenuVisible:false
+            });
         }
 
       }
