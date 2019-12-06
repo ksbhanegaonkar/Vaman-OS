@@ -193,6 +193,9 @@ class Desktop extends Component{
 
     onContextMenuOptionClick(event){
       console.log(event.target.childNodes[0].data +" on app "+this.state.rightClickedAppName);
+      postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
+      (data) => console.log("Data is ::::"+data)
+      );
 
     }
 
