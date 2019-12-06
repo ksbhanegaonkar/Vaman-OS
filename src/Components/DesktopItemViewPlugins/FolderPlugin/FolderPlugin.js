@@ -37,6 +37,8 @@ class FolderPlugin extends Component{
         return desktopItemList;
       }
 
+      
+
 
 }
 export default FolderPlugin;
