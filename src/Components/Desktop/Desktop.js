@@ -41,6 +41,7 @@ class Desktop extends Component{
     mouseYposition:0,
     mouseButtonType:'',
     clickedComponentClass:'',
+    rightClickedAppName:'',
     
     iconsList:{},
 
@@ -107,6 +108,7 @@ class Desktop extends Component{
               mouseYposition:yPosition,
               clickedComponentClass:"file",
               mouseButtonType:'right-click',
+              rightClickedAppName:componentClicked,
               contextMenuVisible:true,
               startMenuVisible:false
             });
@@ -116,6 +118,7 @@ class Desktop extends Component{
             { mouseXposition:xPosition,
               mouseYposition:yPosition,
               clickedComponentClass:"folder",
+              rightClickedAppName:componentClicked,
               mouseButtonType:'right-click',
               contextMenuVisible:true,
               startMenuVisible:false
@@ -189,7 +192,7 @@ class Desktop extends Component{
     }
 
     onContextMenuOptionClick(event){
-      console.log(event.target);
+      console.log(event.target.childNodes[0].data +" on app "+this.state.rightClickedAppName);
 
     }
 
