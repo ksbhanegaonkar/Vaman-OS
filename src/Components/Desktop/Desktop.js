@@ -193,9 +193,23 @@ class Desktop extends Component{
 
     onContextMenuOptionClick(event){
       console.log(event.target.childNodes[0].data +" on app "+this.state.rightClickedAppName);
-      postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
-      (data) => this.loadDesktopItems()
-      );
+      if(event.target.childNodes[0].data.includes("Download")){
+        postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
+        (data) => {
+          var element = document.createElement('a');
+          element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data.payload));
+          element.setAttribute('download', data.fileName);
+          element.style.display = 'none';
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        }
+        );
+      }else{
+        postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
+        (data) => this.loadDesktopItems()
+        );
+      }
 
     }
 
