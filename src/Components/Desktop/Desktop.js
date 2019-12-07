@@ -205,8 +205,8 @@ class Desktop extends Component{
           document.body.removeChild(element);
         }
         );
-      }else if(event.target.childNodes[0].data.includes("Open")){
-        
+      }else if(event.target.childNodes[0].data.includes("Upload")){
+        this.refs.fileUploader.click();
       }else{
         postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
         (data) => this.loadDesktopItems()
@@ -355,6 +355,49 @@ class Desktop extends Component{
       return desktopItemViewList;
     }
 
+     readUploadedFileAsText (inputFile) {
+      const temporaryFileReader = new FileReader();
+  
+      return new Promise((resolve, reject) => {
+        temporaryFileReader.onerror = () => {
+          temporaryFileReader.abort();
+          reject(new DOMException("Problem parsing input file."));
+        };
+  
+        temporaryFileReader.onload = () => {
+          resolve(temporaryFileReader.result);
+        };
+        temporaryFileReader.readAsText(inputFile);
+      });
+    };
+  
+    uploadFile = async event => {
+      event.persist();
+  
+      if (!event.target || !event.target.files) {
+        return;
+      }
+  
+      this.setState({ waitingForFileUpload: true });
+  
+      const fileList = event.target.files;
+  
+      const latestUploadedFile = fileList.item(fileList.length - 1);
+  
+      try {
+        const fileContents = await this.readUploadedFileAsText(latestUploadedFile);
+        let fu1 = document.getElementById("FileUpload").value;
+
+        console.log("File name is :::"+fu1+"file content is ::::: "+fileContents);
+        //document.getElementById("fileToLoad").value = null;
+      } catch (e) {
+        console.log(e);
+        this.setState({
+          waitingForFileUpload: false
+        });
+      }
+    };
+
     render() {
         return (<div 
         className="desktop-wallpaper">
@@ -376,7 +419,7 @@ class Desktop extends Component{
          </StartMenu> 
          {this.renderDesktopItems()}
          {this.renderDesktopItemView()}
-         
+         <input type="file" id="FileUpload" ref="fileUploader" style={{display: "none"}} onChange={this.uploadFile.bind(this)}/>
         </div>)
       }
 
