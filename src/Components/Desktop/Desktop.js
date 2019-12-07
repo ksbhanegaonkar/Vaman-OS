@@ -207,6 +207,8 @@ class Desktop extends Component{
         );
       }else if(event.target.childNodes[0].data.includes("Upload")){
         this.refs.fileUploader.click();
+      }else if(event.target.childNodes[0].data.includes("Refresh")){
+
       }else{
         postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
         (data) => this.loadDesktopItems()
@@ -386,10 +388,16 @@ class Desktop extends Component{
   
       try {
         const fileContents = await this.readUploadedFileAsText(latestUploadedFile);
-        let fu1 = document.getElementById("FileUpload").value;
+        const fileName = document.getElementById("FileUpload").value;
 
-        console.log("File name is :::"+fu1+"file content is ::::: "+fileContents);
-        //document.getElementById("fileToLoad").value = null;
+       
+       
+        postRequest('/uploadfile',{fileName:fileName,payload:fileContents},
+        (data) => {
+          this.loadDesktopItems()
+        }
+        );
+
       } catch (e) {
         console.log(e);
         this.setState({
