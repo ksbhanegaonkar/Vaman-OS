@@ -205,6 +205,8 @@ class Desktop extends Component{
           document.body.removeChild(element);
         }
         );
+      }else if(event.target.childNodes[0].data.includes("Open")){
+        
       }else{
         postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
         (data) => this.loadDesktopItems()
