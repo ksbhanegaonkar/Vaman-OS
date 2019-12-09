@@ -12,7 +12,7 @@ import LoadingScreen from '../LodingScreen/LoadingScreen';
 import { get } from 'https';
 import { delay } from 'q';
 import {withRouter} from 'react-router-dom';
-import {postRequest,getRequest} from '../Utils/RestUtil';
+import {postRequest,getRequest,filePostRequest} from '../Utils/RestUtil';
 import { conditionalExpression } from '@babel/types';
 class Desktop extends Component{
   
@@ -373,37 +373,13 @@ class Desktop extends Component{
       });
     };
   
-    uploadFile = async event => {
-      event.persist();
-  
-      if (!event.target || !event.target.files) {
-        return;
-      }
-  
-      this.setState({ waitingForFileUpload: true });
-  
-      const fileList = event.target.files;
-  
-      const latestUploadedFile = fileList.item(fileList.length - 1);
-  
-      try {
-        const fileContents = await this.readUploadedFileAsText(latestUploadedFile);
-        const fileName = document.getElementById("FileUpload").value;
-
-       
-       
-        postRequest('/uploadfile',{fileName:fileName,payload:fileContents},
-        (data) => {
-          this.loadDesktopItems()
-        }
-        );
-
-      } catch (e) {
-        console.log(e);
-        this.setState({
-          waitingForFileUpload: false
-        });
-      }
+    uploadFile = async e => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      filePostRequest("/upload",formData,(data)=>{
+        this.loadDesktopItems()
+      })
     };
 
     render() {
