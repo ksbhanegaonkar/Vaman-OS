@@ -194,17 +194,66 @@ class Desktop extends Component{
     onContextMenuOptionClick(event){
       console.log(event.target.childNodes[0].data +" on app "+this.state.rightClickedAppName);
       if(event.target.childNodes[0].data.includes("Download")){
-        postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
-        (data) => {
-          var element = document.createElement('a');
-          element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data.payload));
-          element.setAttribute('download', data.fileName);
-          element.style.display = 'none';
-          document.body.appendChild(element);
-          element.click();
-          document.body.removeChild(element);
+
+        filePostRequest('/downloadapp',{item:this.state.rightClickedAppName,option:"Download File"},
+        (response) => {
+
+        
+                  let filename = "";
+                  let disposition = "attachment;filename=sample.txt";//response.headers.get('Content-Disposition');
+                  //console.log("dispertion is ::::: "+disposition.get("Content-Disposition"));
+                  //if (disposition) {
+                      let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                      let matches = filenameRegex.exec(disposition);
+                      if (matches != null && matches[1]) { 
+                        filename = matches[1].replace(/['"]/g, '');
+                      }
+                  //}
+        
+        
+                  response.blob().then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                    });
+             
+
         }
         );
+        //console.log({item:this.state.rightClickedAppName,option:event.target.childNodes[0].data});
+    //     fetch('http://localhost:8083/downloadapp', {
+    //       headers:{
+    //         'Authorization':localStorage.getItem("jwtToken"),
+    //         'Content-Type': 'application/json'
+    //       },
+    //        method: 'POST', // or 'PUT'
+    //        //mode:"no-cors",
+    //        body: JSON.stringify({item:this.state.rightClickedAppName,option:"Download File"})
+    //     })
+    //     .then(response => {
+    //       let filename = "";
+    //       let disposition = "attachment;filename=sample.txt";//response.headers.get('Content-Disposition');
+    //       //console.log("dispertion is ::::: "+disposition.get("Content-Disposition"));
+    //       //if (disposition) {
+    //           let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+    //           let matches = filenameRegex.exec(disposition);
+    //           if (matches != null && matches[1]) { 
+    //             filename = matches[1].replace(/['"]/g, '');
+    //           }
+    //       //}
+
+
+    //       response.blob().then(blob => {
+    //         let url = window.URL.createObjectURL(blob);
+    //         let a = document.createElement('a');
+    //         a.href = url;
+    //         a.download = filename;
+    //         a.click();
+    //         });
+    //  });
+
       }else if(event.target.childNodes[0].data.includes("Upload")){
         this.refs.fileUploader.click();
       }else if(event.target.childNodes[0].data.includes("Refresh")){

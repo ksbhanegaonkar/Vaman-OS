@@ -23,11 +23,12 @@ export const filePostRequest =(action,data,onDataReceive) =>{
   fetch(new Request("http://localhost:8083"+action),
   {
     headers:{
-      'Authorization':localStorage.getItem("jwtToken")
+      'Authorization':localStorage.getItem("jwtToken"),
+      'Content-Type': 'application/json'
     },
      method: 'POST', // or 'PUT'
      //mode:"no-cors",
-     body: data // data can be `string` or {object}!
+     body: JSON.stringify(data) // data can be `string` or {object}!
   }
      )
 .then((res)=>res)
