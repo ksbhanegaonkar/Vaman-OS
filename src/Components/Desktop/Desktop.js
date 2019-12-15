@@ -12,7 +12,7 @@ import LoadingScreen from '../LodingScreen/LoadingScreen';
 import { get } from 'https';
 import { delay } from 'q';
 import {withRouter} from 'react-router-dom';
-import {postRequest,getRequest,filePostRequest} from '../Utils/RestUtil';
+import {postRequest,getRequest,downloadFilePostRequest,uploadFilePostRequest} from '../Utils/RestUtil';
 import { conditionalExpression } from '@babel/types';
 class Desktop extends Component{
   
@@ -195,7 +195,7 @@ class Desktop extends Component{
       console.log(event.target.childNodes[0].data +" on app "+this.state.rightClickedAppName);
       if(event.target.childNodes[0].data.includes("Download")){
 
-        filePostRequest('/downloadapp',{item:this.state.rightClickedAppName,option:"Download File"},
+        downloadFilePostRequest('/downloadapp',{item:this.state.rightClickedAppName,option:"Download File"},
         (response) => {
                   const [app, type, id, name] = this.state.rightClickedAppName.split("/");
                   let filename = name;
@@ -393,7 +393,7 @@ class Desktop extends Component{
       e.preventDefault();
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      filePostRequest("/upload",formData,(data)=>{
+      uploadFilePostRequest("/upload",formData,(data)=>{
         this.loadDesktopItems()
       })
     };

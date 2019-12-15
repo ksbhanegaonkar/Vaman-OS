@@ -19,7 +19,7 @@ export const postRequest =(action,data,onDataReceive) =>{
   });
 }
 
-export const filePostRequest =(action,data,onDataReceive) =>{
+export const downloadFilePostRequest =(action,data,onDataReceive) =>{
   fetch(new Request("http://localhost:8083"+action),
   {
     headers:{
@@ -29,6 +29,24 @@ export const filePostRequest =(action,data,onDataReceive) =>{
      method: 'POST', // or 'PUT'
      //mode:"no-cors",
      body: JSON.stringify(data) // data can be `string` or {object}!
+  }
+     )
+.then((res)=>res)
+.then(data=>{
+  onDataReceive(data);
+});
+}
+
+export const uploadFilePostRequest =(action,data,onDataReceive) =>{
+  fetch(new Request("http://localhost:8083"+action),
+  {
+    headers:{
+      'Authorization':localStorage.getItem("jwtToken"),
+      
+    },
+     method: 'POST', // or 'PUT'
+     //mode:"no-cors",
+     body: data // data can be `string` or {object}!
   }
      )
 .then((res)=>res)
