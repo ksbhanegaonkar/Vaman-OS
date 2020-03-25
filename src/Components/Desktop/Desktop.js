@@ -81,6 +81,8 @@ class Desktop extends Component{
 
 
     handleContextMenu(event){
+      console.log("Handled event is ::::");
+      console.dir(event.target );
       const componentClicked = event.target.className;
       const xPosition = event.clientX;
       const yPosition = event.clientY;
@@ -89,7 +91,7 @@ class Desktop extends Component{
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
         ||componentClicked === 'task-bar'
-        ||componentClicked === 'desktop-item-view'){
+        ||componentClicked === 'desktop-item-view-folder'){
 
           
           this.setState(
