@@ -88,13 +88,15 @@ class Desktop extends Component{
       event.preventDefault();
       if(componentClicked === 'desktop-wallpaper' 
         ||componentClicked === 'start-menu-button' 
-        ||componentClicked === 'task-bar'){
+        ||componentClicked === 'task-bar'
+        ||componentClicked === 'desktop-item-view'){
 
           
           this.setState(
               { mouseXposition:xPosition,
                 mouseYposition:yPosition,
                 clickedComponentClass:componentClicked,
+                rightClickedAppName:componentClicked,
                 mouseButtonType:'right-click',
                 contextMenuVisible:true,
                 startMenuVisible:false
@@ -226,6 +228,9 @@ class Desktop extends Component{
       }else if(event.target.childNodes[0].data.includes("Refresh")){
 
       }else{
+        console.log("right clicked target object is :::");
+        console.dir(this.state.rightClickedAppName);
+        console.dir(event.target);
         postRequest('/oncontextmenuaction',{item:this.state.rightClickedAppName,option:event.target.childNodes[0].data},
         (data) => this.loadDesktopItems()
         );
